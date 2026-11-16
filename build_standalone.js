@@ -115,9 +115,48 @@ html = html.replace(
     `<script>\n${js}\n</script>`
 );
 
-// Guardar maqui_ventas_demo.html
+// Guardar maqui_ventas_demo.html en la raíz
 const outPath = path.join(rootDir, 'maqui_ventas_demo.html');
 fs.writeFileSync(outPath, html, 'utf-8');
 
+// Preparar carpeta dist/ para despliegues en Vercel, Netlify o cualquier CDN
+const distDir = path.join(rootDir, 'dist');
+if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir, { recursive: true });
+}
+
+// 1. Escribir index.html y maqui_ventas_demo.html en dist/
+fs.writeFileSync(path.join(distDir, 'index.html'), html, 'utf-8');
+fs.writeFileSync(path.join(distDir, 'maqui_ventas_demo.html'), html, 'utf-8');
+
+// 2. Copiar páginas modulares a dist/
+const pages = ['catalogo.html', 'cotizador.html', 'admin.html', 'ayuda.html'];
+pages.forEach(page => {
+    const srcPage = path.join(srcDir, page);
+    if (fs.existsSync(srcPage)) {
+        fs.copyFileSync(srcPage, path.join(distDir, page));
+    }
+});
+
+// 3. Copiar directorios estáticos de soporte a dist/
+function copyRecursive(src, dest) {
+    if (!fs.existsSync(src)) return;
+    if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+    for (const item of fs.readdirSync(src)) {
+        const sPath = path.join(src, item);
+        const dPath = path.join(dest, item);
+        if (fs.statSync(sPath).isDirectory()) {
+            copyRecursive(sPath, dPath);
+        } else {
+            fs.copyFileSync(sPath, dPath);
+        }
+    }
+}
+
+copyRecursive(path.join(srcDir, 'css'), path.join(distDir, 'css'));
+copyRecursive(path.join(srcDir, 'js'), path.join(distDir, 'js'));
+copyRecursive(path.join(srcDir, 'assets'), path.join(distDir, 'assets'));
+copyRecursive(path.join(srcDir, 'partials'), path.join(distDir, 'partials'));
+
 const finalSizeMB = (fs.statSync(outPath).size / 1024 / 1024).toFixed(2);
-console.log(`✔ Archivo maqui_ventas_demo.html generado exitosamente (${finalSizeMB} MB con diccionario único de imágenes base64 optimizado).`);
+console.log(`✔ Archivo maqui_ventas_demo.html y bundle dist/ generados exitosamente (${finalSizeMB} MB).`);

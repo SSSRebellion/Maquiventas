@@ -4,9 +4,8 @@
   "description": "Sistema web para la gestión y comercialización de maquinaria pesada con React, Vite, Carrito de Compras, Pasarela de Pagos e Historial de Pedidos",
   "main": "src/js/app.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "build": "node build_standalone.js",
+    "dev": "node server.js",
     "start": "node server.js",
     "test:unit": "node test.js",
     "cypress:open": "cypress open",

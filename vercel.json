@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "outputDirectory": "dist",
+  "buildCommand": "node build_standalone.js",
+  "rewrites": [
+    { "source": "/catalogo", "destination": "/catalogo.html" },
+    { "source": "/cotizador", "destination": "/cotizador.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/ayuda", "destination": "/ayuda.html" }
+  ]
+}
