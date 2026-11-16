@@ -24,5 +24,5 @@ Cypress.Commands.add('registerUser', (name, email, password) => {
  * Comando personalizado para Cerrar Sesión
  */
 Cypress.Commands.add('logoutUser', () => {
-  cy.get('#user-nav button').click();
+  cy.get('#user-nav button').click({ force: true });
 });

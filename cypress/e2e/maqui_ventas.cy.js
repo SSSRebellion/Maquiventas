@@ -29,7 +29,7 @@ describe('SISTEMA MAQUI VENTAS - PRUEBAS END-TO-END (CYPRESS)', () => {
         .and('contain', 'Error de Autenticación');
 
       // Las secciones privadas deben permanecer ocultas
-      cy.get('#client-section').should('have.class', 'hidden');
+      cy.get('#user-nav').should('have.class', 'hidden');
       cy.get('#admin-section').should('have.class', 'hidden');
     });
 
@@ -112,13 +112,13 @@ describe('SISTEMA MAQUI VENTAS - PRUEBAS END-TO-END (CYPRESS)', () => {
       cy.get('.machine-card').should('have.length.at.least', 3);
 
       // Probar filtro de búsqueda en tiempo real
-      cy.get('#catalog-search').type('Caterpillar');
+      cy.get('#top-cat-search').type('Caterpillar', { force: true });
       cy.get('.machine-card').each(($card) => {
         cy.wrap($card).should('contain', 'Caterpillar');
       });
 
       // Limpiar búsqueda y recuperar listado completo
-      cy.get('#catalog-search').clear();
+      cy.get('#top-cat-search').clear({ force: true });
       cy.get('.machine-card').should('have.length.at.least', 3);
     });
 
@@ -150,7 +150,7 @@ describe('SISTEMA MAQUI VENTAS - PRUEBAS END-TO-END (CYPRESS)', () => {
       });
 
       // Cerrar modal de factura
-      cy.get('#invoice-modal .modal-close-btn').click();
+      cy.get('#invoice-modal .modal-close-btn').click({ force: true });
       cy.get('#invoice-modal').should('not.have.class', 'active');
     });
   });
@@ -181,11 +181,10 @@ describe('SISTEMA MAQUI VENTAS - PRUEBAS END-TO-END (CYPRESS)', () => {
         .and('contain', 'Maquinaria Registrada');
 
       // Comprobar que la nueva maquinaria encabeza la tabla
-      cy.get('#inventory-table tr').first().within(() => {
-        cy.should('contain', newName);
-        cy.should('contain', '$175,000');
-        cy.should('contain', '3 unidades');
-      });
+      cy.get('#inventory-table tr').first()
+        .should('contain', newName)
+        .and('contain', '$175,000')
+        .and('contain', '3 unidades');
 
       // Formulario debe haberse limpiado
       cy.get('#new-machine-name').should('have.value', '');

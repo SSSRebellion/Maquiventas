@@ -1691,7 +1691,7 @@ function addMachine() {
     renderCatalog();
     updateAdminStats();
 
-    showToast(`Se agregó "${newMachine.name}" correctamente al inventario.`, 'success', 'Producto Publicado');
+    showToast(`Se agregó "${newMachine.name}" correctamente al inventario.`, 'success', 'Maquinaria Registrada');
 }
 
 function remove(id) {
