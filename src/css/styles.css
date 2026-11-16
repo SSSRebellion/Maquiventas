@@ -1,0 +1,19 @@
+/* ========================================================
+   MAQUI VENTAS - MASTER MODULAR STYLESHEET
+   Caterpillar (CAT) & GECOLSA Official Corporate Design System
+   ======================================================== */
+
+@import url('./variables.css');
+@import url('./navbar.css');
+@import url('./home.css');
+@import url('./catalog.css');
+@import url('./auth.css');
+@import url('./cart.css');
+@import url('./gateway.css');
+@import url('./admin.css');
+@import url('./detail.css');
+@import url('./invoice.css');
+@import url('./history.css');
+@import url('./footer.css');
+@import url('./toasts.css');
+@import url('./help.css');

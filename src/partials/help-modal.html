@@ -1,0 +1,170 @@
+<!-- ==================== MODAL CENTRO DE AYUDA ==================== -->
+<div id="help-modal" class="modal-overlay" onclick="if(event.target === this) closeHelpCenter();">
+    <div class="modal-container" style="max-width: 860px; max-height: 90vh;">
+        <div class="modal-header">
+            <div>
+                <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.5px;">Soporte Corporativo & Atención Técnica</span>
+                <h2 class="modal-title">Centro de Ayuda al Cliente</h2>
+            </div>
+            <button class="modal-close-btn" onclick="closeHelpCenter()">&times;</button>
+        </div>
+
+        <div class="modal-body" style="padding: 1.5rem 2rem;">
+            <!-- Pestañas internas del Centro de Ayuda -->
+            <div class="help-tabs" style="display: flex; gap: 8px; border-bottom: 2px solid var(--cat-gray-200); margin-bottom: 1.5rem; padding-bottom: 4px;">
+                <button type="button" class="help-tab-btn active" id="tab-btn-faq" onclick="switchHelpTab('faq')">
+                    Preguntas Frecuentes
+                </button>
+                <button type="button" class="help-tab-btn" id="tab-btn-contact" onclick="switchHelpTab('contact')">
+                    Canales de Atención Directa
+                </button>
+                <button type="button" class="help-tab-btn" id="tab-btn-ticket" onclick="switchHelpTab('ticket')">
+                    Radicar Consulta / Ticket
+                </button>
+            </div>
+
+            <!-- Tab 1: FAQ Acordeón -->
+            <div id="help-tab-faq" class="help-tab-pane">
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cómo se coordina el despacho y entrega de maquinaria en cama baja?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Todos nuestros equipos son transportados en tractocamiones de cama baja debidamente asegurados y escoltados según la normatividad vial nacional. Una vez confirmada la adquisición o aprobado el leasing, nuestro departamento de logística coordina la fecha y coordenadas exactas de descarga en su frente de obra, campamento o patio de acopio en un plazo de 24 a 72 horas hábiles.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Qué cobertura incluye la Garantía Oficial de Fábrica?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>La garantía oficial cubre defectos de manufactura en tren de fuerza (motor, transmisión, mandos finales y bombas hidráulicas principales) por un periodo de hasta 3 años o 5,000 horas de operación (lo que ocurra primero). Incluye la primera revisión técnica de pre-entrega (PDI) y mano de obra certificada en nuestros talleres autorizados.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cuáles son los requisitos para acceder al Leasing Financiero CAT?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>El leasing está dirigido a personas jurídicas y contratistas con actividad económica verificable. Se requiere RUT actualizado, estados financieros de los dos últimos ejercicios contables y extractos bancarios de los últimos 3 meses. El estudio de crédito toma menos de 24 horas y permite plazos desde 12 hasta 60 meses con tasas preferenciales.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Qué documentación legal y tributaria se entrega con cada equipo?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Junto con el equipo se entrega Factura Electrónica de Venta avalada por la DIAN con código CUFE, declaración y manifiesto de aduana / importación nacionalizada, certificación técnica de alistamiento PDI, catálogo de partes y manuales oficiales de operación y mantenimiento en español.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cómo solicitar mantenimiento preventivo o repuestos en terreno?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Contamos con unidades móviles de taller de campo para asistencia técnica directamente en mina u obra. Puede agendar el servicio comunicándose a la línea técnica PBX (601) 800-MAQUI ext. 402 o mediante el formulario de radicación de tickets de este centro de ayuda.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Canales de Atención -->
+            <div id="help-tab-contact" class="help-tab-pane hidden">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="help-contact-card">
+                        <div class="help-contact-title">Mesa de Ayuda PBX Nacional</div>
+                        <div class="help-contact-desc">Atención telefónica de lunes a sábado de 7:00 a.m. a 6:00 p.m.</div>
+                        <div class="help-contact-val">+57 (601) 800-MAQUI (800-62784)</div>
+                        <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Línea Gratuita Nacional: 01 8000 914 200</div>
+                    </div>
+
+                    <div class="help-contact-card">
+                        <div class="help-contact-title">Línea de Emergencia Operacional 24/7</div>
+                        <div class="help-contact-desc">Asistencia técnica exclusiva para equipos detenidos en obra civil.</div>
+                        <div class="help-contact-val">+57 (315) 880-9920</div>
+                        <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Guardia técnica disponible los 365 días del año</div>
+                    </div>
+
+                    <div class="help-contact-card">
+                        <div class="help-contact-title">Soporte Escrito y Garantías</div>
+                        <div class="help-contact-desc">Recepción de solicitudes técnicas y reclamos de garantía.</div>
+                        <div class="help-contact-val">soporte@maquiventas.com</div>
+                        <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Tiempo estimado de respuesta: menos de 2 horas hábiles</div>
+                    </div>
+
+                    <div class="help-contact-card">
+                        <div class="help-contact-title">Sede Central y Patio de Pruebas</div>
+                        <div class="help-contact-desc">Demostración en vivo y entrega técnica de maquinaria.</div>
+                        <div class="help-contact-val">Parque Terrapuerto Km 2.5 Vía Funza</div>
+                        <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Bogotá D.C. - Cundinamarca, Colombia</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Formulario de Ticket -->
+            <div id="help-tab-ticket" class="help-tab-pane hidden">
+                <form id="help-ticket-form" onsubmit="event.preventDefault(); submitHelpTicket();">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Nombre y Apellido *</label>
+                            <input type="text" id="ticket-name" class="form-control" placeholder="Ej. Carlos Mendoza" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Razón Social / Empresa</label>
+                            <input type="text" id="ticket-company" class="form-control" placeholder="Ej. Constructora del Norte S.A.S.">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Correo Electrónico Corporativo *</label>
+                            <input type="email" id="ticket-email" class="form-control" placeholder="carlos@constructora.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono de Contacto *</label>
+                            <input type="tel" id="ticket-phone" class="form-control" placeholder="Ej. 310 123 4567" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo de Requerimiento *</label>
+                        <select id="ticket-type" class="form-control" style="cursor: pointer;" required>
+                            <option value="Soporte Técnico">Soporte Técnico y Mantenimiento en Obra</option>
+                            <option value="Consulta sobre Pedido">Seguimiento de Despacho y Entrega</option>
+                            <option value="Garantía de Fábrica">Reclamo o Trámite de Garantía</option>
+                            <option value="Asesoría Comercial">Asesoría de Compra o Financiación Leasing</option>
+                            <option value="Repuestos">Cotización de Repuestos Originales</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción Detallada del Requerimiento *</label>
+                        <textarea id="ticket-message" class="form-control" rows="4" placeholder="Describa su solicitud, modelo de equipo de interés o situación técnica..." required></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
+                        <button type="submit" class="btn btn-primary" style="padding: 0.85rem 1.75rem; font-weight: 800; font-size: 0.95rem;">
+                            Radicar Solicitud de Ayuda
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeHelpCenter()">
+                Cerrar Centro de Ayuda
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,438 @@
+/* ========================================================
+   SECCIÓN DE CATÁLOGO Y TARJETAS ESTILO CATERPILLAR
+   ======================================================== */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--cat-gray-200);
+}
+
+.section-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--cat-black);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 28px;
+    background: var(--cat-yellow);
+    border-radius: 2px;
+}
+
+.section-desc {
+    color: var(--cat-gray-500);
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1.75rem;
+}
+
+.machine-card {
+    background: var(--cat-white);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid var(--cat-gray-200);
+    border-top: 4px solid transparent;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.machine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    border-top: 4px solid var(--cat-yellow);
+    border-color: #CCC;
+}
+
+/* Card Image Wrapper with Interactive Overlay */
+.card-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+}
+
+.machine-card:hover .card-img {
+    transform: scale(1.06);
+}
+
+.card-img-interactive-hint {
+    position: absolute;
+    bottom: 12px;
+    background: rgba(0, 0, 0, 0.85);
+    color: var(--cat-white);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: var(--transition-fast);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-img-wrapper:hover .card-img-interactive-hint {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-img-overlay-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--cat-yellow);
+    color: var(--cat-black);
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.card-stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.stock-available {
+    background-color: #1E824C;
+    color: var(--white);
+}
+.stock-available .pulse-dot {
+    background-color: #ffffff;
+    box-shadow: 0 0 0 rgba(255,255,255, 0.6);
+    animation: pulseAvailable 1.8s infinite;
+}
+
+.stock-low {
+    background-color: #E65100;
+    color: #FFFFFF;
+}
+.stock-low .pulse-dot {
+    background-color: #FFFFFF;
+}
+
+.stock-out {
+    background-color: #B71C1C;
+    color: var(--white);
+}
+.stock-out .pulse-dot {
+    background-color: #ffffff;
+}
+
+@keyframes pulseAvailable {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+.card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background: var(--cat-white);
+}
+
+.machine-name {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--cat-black);
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: -0.3px;
+}
+
+.machine-specs {
+    font-size: 0.82rem;
+    color: var(--cat-gray-600);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.spec-chip {
+    background: #EEEEEE;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #333333;
+    border: 1px solid #E0E0E0;
+}
+
+.card-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--cat-gray-200);
+    gap: 12px;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: 0.7rem;
+    color: #666;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.price-amount {
+    font-family: var(--font-heading);
+    font-size: 1.55rem;
+    font-weight: 900;
+    color: var(--cat-black);
+    letter-spacing: -0.5px;
+}
+
+.card-action-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ==================== DETAIL / FICHA TÉCNICA MODAL ==================== */
+.detail-modal-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .detail-modal-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.detail-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-main-img-wrap {
+    width: 100%;
+    height: 260px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--dark-900);
+    border: 1px solid var(--gray-200);
+    position: relative;
+}
+
+.detail-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.detail-thumbs-strip {
+    display: flex;
+    gap: 8px;
+}
+
+.detail-thumb-btn {
+    flex: 1;
+    height: 60px;
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    border: 2px solid var(--gray-200);
+    background: var(--dark-800);
+    cursor: pointer;
+    padding: 0;
+    transition: var(--transition);
+}
+
+.detail-thumb-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-thumb-btn.active {
+    border-color: var(--cat-yellow);
+    box-shadow: 0 0 8px rgba(255, 205, 0, 0.4);
+}
+
+.detail-specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 1rem 0;
+}
+
+.detail-specs-table tr:nth-child(even) {
+    background: var(--gray-50);
+}
+
+.detail-specs-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.detail-spec-label {
+    font-weight: 600;
+    color: var(--gray-600);
+    width: 45%;
+}
+
+.detail-spec-val {
+    font-weight: 700;
+    color: var(--dark-900);
+}
+
+/* BANNER OFICIAL CAT DE ASISTENCIA TÉCNICA */
+.cat-bottom-help-banner {
+    background: var(--cat-black);
+    color: var(--cat-white);
+    padding: 2.25rem 2rem;
+    margin-top: 3.5rem;
+    border-top: 3px solid var(--cat-yellow);
+    border-radius: var(--radius-xs);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.cat-help-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.cat-help-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+    color: var(--cat-white);
+    text-transform: none;
+}
+
+.cat-help-subtitle {
+    color: #A0AEC0;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.cat-help-btn-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cat-help-white-btn {
+    background: var(--cat-white);
+    color: var(--cat-black);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.cat-help-white-btn:hover {
+    background: #E5E5E5;
+}
+
+.cat-help-yellow-btn {
+    background: var(--cat-yellow);
+    color: var(--cat-black);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.cat-help-yellow-btn:hover {
+    background: var(--cat-yellow-hover);
+}

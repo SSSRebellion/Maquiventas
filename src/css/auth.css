@@ -1,0 +1,134 @@
+/* ========================================================
+   MAQUI VENTAS - AUTH VIEW (CU-01 & CU-02)
+   Caterpillar Industrial Corporate Authentication
+   ======================================================== */
+
+.auth-wrapper {
+    max-width: 480px;
+    margin: 1.5rem auto 3rem;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-cat);
+    overflow: hidden;
+    border: 1px solid var(--cat-gray-200);
+    border-top: 4px solid var(--cat-yellow);
+    transition: var(--transition);
+}
+
+.auth-header {
+    background: var(--cat-black);
+    padding: 2.2rem 2rem 1.8rem;
+    text-align: center;
+    color: var(--white);
+    position: relative;
+    border-bottom: 3px solid var(--cat-yellow);
+}
+
+.auth-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.2rem;
+    color: var(--white);
+}
+
+.auth-header p {
+    color: var(--gray-400);
+    font-size: 0.9rem;
+}
+
+.auth-tabs {
+    display: flex;
+    background: var(--cat-charcoal-900);
+    padding: 4px;
+    border-bottom: 2px solid var(--cat-charcoal-700);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 0.75rem;
+    background: transparent;
+    border: none;
+    color: var(--gray-400);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: var(--radius-sm);
+}
+
+.auth-tab.active {
+    background: var(--primary);
+    color: var(--dark-900);
+    font-weight: 700;
+}
+
+.auth-body {
+    padding: 2rem;
+}
+
+.demo-roles-callout {
+    background: var(--gray-50);
+    border: 1px dashed var(--gray-400);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+}
+
+.demo-roles-title {
+    font-weight: 700;
+    color: var(--dark-900);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quick-fill-btn {
+    background: var(--gray-200);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    margin-right: 6px;
+    margin-top: 6px;
+}
+
+.quick-fill-btn:hover {
+    background: var(--primary);
+    color: var(--dark-900);
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark-800);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 0.95rem;
+    font-size: 0.95rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    background-color: var(--white);
+    color: var(--dark-900);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}

@@ -1,0 +1,84 @@
+<!-- ==================== MODAL DE FACTURACIÓN Y PROFORMA (CU-05) ==================== -->
+<div id="invoice-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 720px;">
+        <div class="modal-header">
+            <div class="modal-title" id="invoice-header-title">Factura Comercial de Venta</div>
+            <button class="modal-close-btn" onclick="closeModal('invoice-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="invoice-modal-content" class="invoice-card">
+                <div class="invoice-stamp" id="invoice-stamp-tag">PAGADO</div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div>
+                        <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--dark-900); line-height: 1;">MAQUI VENTAS S.A.S.</h2>
+                        <p style="font-size: 0.8rem; color: var(--gray-600);">NIT: 900.584.219-4 | Régimen Común Especial</p>
+                        <p style="font-size: 0.8rem; color: var(--gray-600);">Distribuidor Oficial de Maquinaria Pesada & Caterpillar Financial</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700;">Documento N°</span>
+                        <div id="inv-number" style="font-size: 1.15rem; font-weight: 800; color: var(--primary-dark);">FAC-2026-00000</div>
+                    </div>
+                </div>
+
+                <div class="invoice-meta-grid">
+                    <div>
+                        <span style="color: var(--gray-400); font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Adquiriente / Solicitante</span>
+                        <div id="inv-customer-name" style="font-weight: 700; color: var(--dark-900); margin-top: 2px;">Cliente</div>
+                        <div id="inv-customer-email" style="color: var(--gray-600); font-size: 0.82rem;">correo@dominio.com</div>
+                    </div>
+                    <div>
+                        <span style="color: var(--gray-400); font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Fecha y Validez</span>
+                        <div id="inv-date" style="font-weight: 600; color: var(--dark-900); margin-top: 2px;">11/11/2026</div>
+                        <div id="inv-status-note" style="color: var(--success); font-size: 0.82rem; font-weight: 600;">Estado: Aprobado / Liquidado</div>
+                    </div>
+                </div>
+
+                <table class="invoice-item-table">
+                    <thead>
+                        <tr>
+                            <th>Descripción de Maquinaria</th>
+                            <th style="text-align: center; width: 60px;">Cant.</th>
+                            <th style="text-align: right; width: 140px;">Precio</th>
+                            <th style="text-align: right; width: 140px;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-items-body">
+                        <tr>
+                            <td>
+                                <strong id="inv-item-name">Excavadora Caterpillar</strong>
+                                <div style="font-size: 0.75rem; color: var(--gray-400);">Garantía de fábrica certificada + Alistamiento Técnico</div>
+                            </td>
+                            <td style="text-align: center; font-weight: 600;">1</td>
+                            <td style="text-align: right;" id="inv-item-unit-price">$0</td>
+                            <td style="text-align: right; font-weight: 700;" id="inv-item-total">$0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="invoice-total-row">
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--gray-600);">Estado de Entrega: <strong id="inv-delivery-state">Aprobado para despacho en Patio</strong></span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 0.85rem; color: var(--gray-600);">Total Liquidado (USD):</span>
+                        <div id="inv-grand-total" style="font-size: 1.6rem; font-weight: 800; color: var(--dark-900);">$0</div>
+                    </div>
+                </div>
+
+                <div class="barcode-sim"></div>
+                <div style="text-align: center; font-size: 0.72rem; color: var(--gray-400); margin-top: 4px;">
+                    CÓDIGO DE VERIFICACIÓN ELECTRÓNICA CUFE: 8f420e7b99c15d482aa093417730eac310f
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="printInvoice()">
+                Imprimir Documento
+            </button>
+            <button class="btn btn-primary" onclick="closeModal('invoice-modal')">
+                Entendido / Cerrar
+            </button>
+        </div>
+    </div>
+</div>

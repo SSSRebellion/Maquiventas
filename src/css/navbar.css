@@ -1,0 +1,293 @@
+/* ========================================================
+   HEADER PRINCIPAL ESTILO GECOLSA CAT (SCREENSHOT OFICIAL)
+   ======================================================== */
+.navbar.cat-navbar {
+    background: var(--cat-black);
+    color: var(--cat-white);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--cat-yellow);
+}
+
+/* Fila Superior: Logo CAT + Buscador Dual + Enlaces */
+.cat-nav-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 1.75rem;
+    gap: 1.25rem;
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Logo Oficial Emblemático CAT / Dealer */
+.cat-brand-wrapper {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    transition: var(--transition-fast);
+}
+
+.cat-brand-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.cat-brand-dealer {
+    background: var(--cat-yellow);
+    color: var(--cat-black);
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 900;
+    padding: 4px 12px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    border-right: 2px solid var(--cat-black);
+}
+
+.cat-brand-emblem {
+    background: var(--cat-black);
+    color: var(--cat-white);
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 900;
+    padding: 4px 10px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    position: relative;
+    border: 1px solid #333;
+}
+
+.cat-triangle {
+    color: var(--cat-yellow);
+    font-size: 0.65rem;
+    position: absolute;
+    bottom: 2px;
+    left: 45%;
+    transform: translateX(-50%);
+}
+
+/* Barra de Búsqueda Dual Estilo GECOLSA CAT */
+.cat-search-dual-bar {
+    display: flex;
+    align-items: center;
+    background: var(--cat-white);
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    height: 38px;
+    flex: 1;
+    max-width: 580px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    border: 1px solid #333;
+}
+
+.cat-search-addon-btn {
+    background: #F4F4F4;
+    border: none;
+    border-right: 1px solid #DDD;
+    color: #121212;
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 0 12px;
+    height: 100%;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition-fast);
+}
+
+.cat-search-addon-btn:hover {
+    background: #EBEBEB;
+}
+
+.cat-search-field {
+    border: none;
+    outline: none;
+    padding: 0 12px;
+    flex: 1;
+    font-size: 0.88rem;
+    color: #121212;
+    font-family: var(--font-body);
+}
+
+.cat-search-field::placeholder {
+    color: #888;
+}
+
+.cat-search-btn-submit {
+    background: var(--cat-yellow);
+    border: none;
+    color: var(--cat-black);
+    width: 44px;
+    height: 100%;
+    cursor: pointer;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.cat-search-btn-submit:hover {
+    background: var(--cat-yellow-hover);
+}
+
+/* Enlaces de Cabecera Derecha */
+.cat-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.cat-nav-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--cat-white);
+    cursor: pointer;
+}
+
+.cat-nav-link-btn {
+    background: transparent;
+    border: none;
+    color: var(--cat-white);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: var(--radius-xs);
+    transition: var(--transition-fast);
+    text-decoration: none;
+}
+
+.cat-nav-link-btn:hover {
+    color: var(--cat-yellow);
+}
+
+.cart-nav-btn.cat-cart-btn {
+    background: var(--cat-charcoal-800);
+    border: 1px solid var(--cat-charcoal-700);
+    color: var(--cat-white);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: var(--radius-xs);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition-fast);
+}
+
+.cart-nav-btn.cat-cart-btn:hover {
+    border-color: var(--cat-yellow);
+    background: #252525;
+}
+
+.cart-count-badge {
+    background: var(--cat-yellow);
+    color: var(--cat-black);
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 0.75rem;
+    border-radius: 999px;
+    min-width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.user-pill.cat-user-pill {
+    background: #181818;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cat-logout-btn {
+    color: #FFF !important;
+    border-color: #555 !important;
+    font-family: var(--font-heading) !important;
+    font-weight: 700 !important;
+}
+
+.cat-logout-btn:hover {
+    border-color: var(--cat-yellow) !important;
+    color: var(--cat-yellow) !important;
+}
+
+/* Sub-barra de Navegación CAT (Fila Inferior Oscura) */
+.cat-nav-sub-row {
+    background: #111111;
+    border-top: 1px solid #222222;
+    padding: 0.45rem 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.cat-sub-left, .cat-sub-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 1440px;
+}
+
+.cat-sub-item, .cat-sub-link {
+    color: #D1D5DB;
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+
+.cat-sub-item:hover, .cat-sub-link:hover, .cat-sub-item.active {
+    color: var(--cat-yellow);
+}
+
+@media (max-width: 992px) {
+    .cat-search-dual-bar {
+        order: 3;
+        max-width: 100%;
+        width: 100%;
+    }
+    .cat-nav-top-row {
+        flex-wrap: wrap;
+    }
+    .cat-nav-sub-row {
+        display: none;
+    }
+}

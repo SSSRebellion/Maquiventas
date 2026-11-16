@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de Administración e Inventario de Maquinaria Pesada - Control de Stock, Métricas y Altas de Equipos.">
+    <meta name="theme-color" content="#FFCD00">
+    <title>Portal de Inventario & Métricas | Maqui Ventas CAT Admin</title>
+    <!-- Google Fonts Caterpillar Inspired (Barlow Condensed, Barlow & Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto+Condensed:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body style="background: var(--cat-gray-bg);">
+    <div class="industrial-ribbon"></div>
+
+    <!-- Navigation Header Estilo GECOLSA CAT (Solo texto limpio) -->
+    <header class="navbar cat-navbar">
+        <div class="cat-nav-top-row">
+            <a href="index.html" class="cat-brand-wrapper" title="Maqui Ventas - Distribuidor Autorizado CAT">
+                <div class="cat-brand-dealer">MAQUI VENTAS</div>
+                <div class="cat-brand-emblem">CAT<span class="cat-triangle">▲</span></div>
+            </a>
+
+            <div style="color: var(--white); font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; letter-spacing: 1px;">
+                PORTAL ADMINISTRADOR DE INVENTARIO
+            </div>
+
+            <div class="cat-nav-right">
+                <a href="catalogo.html" class="cat-nav-link-btn" title="Ver Vista Cliente">
+                    <span>Vista Cliente</span>
+                </a>
+                <a href="cotizador.html" class="cat-nav-link-btn" title="Cotizador de Leasing">
+                    <span>Cotizador</span>
+                </a>
+                <a href="ayuda.html" class="cat-nav-link-btn" title="Centro de Ayuda">
+                    <span>Centro de ayuda</span>
+                </a>
+
+                <div id="user-nav" class="user-nav-profile" style="display: flex;">
+                    <div class="user-pill cat-user-pill">
+                        <span id="nav-user-name" style="font-weight: 700;">Ingeniero Administrador</span>
+                        <span id="nav-user-role" class="role-badge admin">Administrador</span>
+                    </div>
+                    <button class="btn btn-outline btn-sm cat-logout-btn" onclick="logout(); window.location.href='index.html';" title="Cerrar sesión">
+                        <span>Salir</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cat-nav-sub-row">
+            <div class="cat-sub-left">
+                <span class="cat-sub-item active">Gestión de Patio</span>
+                <span class="cat-sub-item" onclick="filterAdminTable()">Auditoría de Activos</span>
+                <span class="cat-sub-item" onclick="openAddMachineModal()">Ingresar Nuevo Equipo</span>
+            </div>
+            <div class="cat-sub-right">
+                <span class="cat-sub-link">Patio Central Funza · Estado Operacional OK</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="toast-container"></div>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        
+        <!-- Header del Portal Admin -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; border-bottom: 3px solid var(--cat-yellow); padding-bottom: 1rem;">
+            <div>
+                <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--cat-gray-600); margin-bottom: 4px;">
+                    Control de Operaciones y Flota
+                </div>
+                <h1 style="font-family: var(--font-heading); font-size: 2.6rem; color: var(--cat-black); text-transform: uppercase; line-height: 1;">
+                    Inventario de Maquinaria Pesada
+                </h1>
+                <p style="color: var(--cat-gray-600); font-size: 0.95rem; margin-top: 4px;">
+                    Administre la disponibilidad física de equipos, ajuste precios de lista y publique nuevas unidades con fotografía técnica.
+                </p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="openAddMachineModal()" style="font-size: 1rem; padding: 0.85rem 1.5rem; font-weight: 800;">
+                Ingresar Nuevo Equipo al Inventario
+            </button>
+        </div>
+
+        <!-- Métricas KPI Cards -->
+        <div class="admin-stats-grid">
+            <div class="metric-card">
+                <div class="metric-label">Modelos Registrados en Catálogo</div>
+                <div class="metric-val" id="admin-stat-models">5</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Unidades Físicas en Stock</div>
+                <div class="metric-val" id="admin-stat-stock" style="color: var(--primary-dark);">16</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Valorización de Flota en Patio</div>
+                <div class="metric-val" id="admin-stat-value" style="color: var(--success);">$1,982,000</div>
+            </div>
+        </div>
+
+        <!-- Toolbar de Filtro y Búsqueda -->
+        <div class="admin-toolbar-row">
+            <div style="flex: 1; max-width: 480px;">
+                <input type="text" id="admin-table-search" class="form-control" placeholder="Filtrar inventario por modelo, categoría, marca o ID..." oninput="filterAdminTable()">
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+                <button type="button" class="btn btn-outline" onclick="filterAdminTable()" style="font-size: 0.88rem; font-weight: 700;">
+                    Refrescar Tabla
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabla de Inventario de Maquinaria -->
+        <div class="inventory-table-container">
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">Foto</th>
+                        <th>Modelo / Descripción</th>
+                        <th>Categoría</th>
+                        <th>Precio (USD)</th>
+                        <th style="text-align: center; width: 140px;">Stock en Patio</th>
+                        <th style="text-align: right; width: 120px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-table">
+                    <!-- Se inyecta dinámicamente con renderInventory() -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal para Agregar Maquinaria (CU-09) con Dropzone de Imagen -->
+    <div id="modal-add-machine" class="modal-backdrop" onclick="if(event.target === this) closeAddMachineModal();">
+        <div class="modal-container" style="max-width: 680px;">
+            <div class="modal-header">
+                <div>
+                    <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.5px;">Gestión de Patio</span>
+                    <h2 class="modal-title">Registrar Nueva Maquinaria</h2>
+                </div>
+                <button type="button" class="modal-close-btn" onclick="closeAddMachineModal()">&times;</button>
+            </div>
+
+            <form id="add-machine-form" onsubmit="event.preventDefault(); addMachine();">
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    
+                    <!-- Dropzone de Carga de Foto -->
+                    <div class="form-group">
+                        <label style="font-weight: 700;">Fotografía Técnica del Equipo</label>
+                        <div class="dropzone-box" id="image-dropzone-box" onclick="document.getElementById('new-machine-image-file').click();" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                            <input type="file" id="new-machine-image-file" accept="image/*" style="display: none;" onchange="handleMachineImageSelect(event)">
+                            <div id="image-dropzone-content" class="dropzone-content">
+                                <div class="dropzone-title">Haga clic o arrastre aquí la foto del equipo</div>
+                                <div class="dropzone-subtitle">Formato JPG, PNG o WebP (Recomendado 1200x800px)</div>
+                            </div>
+                            <div id="image-preview-container" class="image-preview-container">
+                                <img id="new-machine-img-preview" src="" alt="Previsualización" class="image-preview-thumb">
+                                <div class="image-preview-info">
+                                    <div id="preview-file-name" class="image-preview-name">foto-equipo.jpg</div>
+                                    <div id="preview-file-size" class="image-preview-meta">0 KB · Lista para publicar</div>
+                                </div>
+                                <button type="button" class="btn btn-outline btn-sm" onclick="removeUploadedImage(event)" style="color: var(--danger); border-color: var(--danger); font-size: 0.75rem;">
+                                    Quitar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre Comercial / Modelo del Equipo *</label>
+                        <input type="text" id="new-machine-name" class="form-control" placeholder="Ej. Retroexcavadora Case 580N" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Categoría Operacional *</label>
+                            <select id="new-machine-category" class="form-control" style="cursor: pointer;">
+                                <option value="Movimiento de Tierras">Movimiento de Tierras</option>
+                                <option value="Agrícola">Agrícola</option>
+                                <option value="Carga y Logística">Carga y Logística</option>
+                                <option value="Pavimentación y Vías">Pavimentación y Vías</option>
+                                <option value="Equipos de Potencia">Equipos de Potencia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Marca / Fabricante</label>
+                            <input type="text" id="new-machine-brand" class="form-control" placeholder="Ej. Caterpillar / Case CE">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Precio USD *</label>
+                            <input type="number" id="new-machine-price" class="form-control" placeholder="Ej. 115000" min="1" step="any" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Stock Físico *</label>
+                            <input type="number" id="new-machine-stock" class="form-control" placeholder="Ej. 3" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Año Fabricación</label>
+                            <input type="number" id="new-machine-year" class="form-control" placeholder="2025" min="1990" max="2027">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción y Especificaciones Técnicas</label>
+                        <textarea id="new-machine-desc" class="form-control" rows="3" placeholder="Ej. 95 HP · Tracción 4x4 · Brazo extensible de 4.5m · Incluye garantía técnica de fábrica y alistamiento oficial."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeAddMachineModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" style="font-weight: 800;">
+                        Guardar y Publicar en Patio
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Modal (Solo texto limpio) -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-container" style="max-width: 440px; text-align: center;">
+            <div class="modal-body" style="padding: 2rem 1.5rem;">
+                <div style="font-family: var(--font-heading); font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--danger); background: var(--danger-light); padding: 4px 12px; border-radius: var(--radius-xs); display: inline-block; margin-bottom: 1rem;">
+                    Confirmación Requerida
+                </div>
+                <h3 id="confirm-modal-title" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">¿Confirmar Acción?</h3>
+                <p id="confirm-modal-msg" style="color: var(--gray-600); font-size: 0.9rem; margin-bottom: 1.5rem;">Esta acción no se puede deshacer.</p>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button id="confirm-modal-cancel" class="btn btn-outline" style="flex: 1;" onclick="closeConfirmModal(false)">Cancelar</button>
+                    <button id="confirm-modal-ok" class="btn btn-danger" style="flex: 1; font-weight: 800;" onclick="closeConfirmModal(true)">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Corporativo (Solo texto limpio) -->
+    <footer class="cat-footer">
+        <div class="cat-footer-container">
+            <div class="cat-footer-brand">
+                <div class="cat-footer-brand-name">MAQUI VENTAS CAT</div>
+                <p>Módulo de Administración de Inventario y Flota de Maquinaria Pesada.</p>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio Corporativo</a></li>
+                    <li><a href="catalogo.html">Catálogo Completo</a></li>
+                    <li><a href="cotizador.html">Cotizador de Leasing</a></li>
+                    <li><a href="ayuda.html">Centro de Ayuda</a></li>
+                    <li><a href="admin.html">Portal de Inventario</a></li>
+                </ul>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Soporte de Patio</h4>
+                <ul>
+                    <li><span>Jefe de Taller: ext. 402</span></li>
+                    <li><span>Control de Despachos: ext. 405</span></li>
+                    <li><span>Sistemas: it@maquiventas.com</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="cat-footer-bottom">
+            <div>&copy; 2026 Maqui Ventas S.A.S. - Panel de Control Interno Autorizado.</div>
+        </div>
+    </footer>
+
+    <!-- Scripts de la Aplicación -->
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!currentUser) {
+                currentUser = users.find(u => u.role === 'admin') || { id: 2, name: 'Ingeniero Administrador', email: 'admin@maqui.com', role: 'admin' };
+            }
+            if (typeof renderInventory === 'function') {
+                renderInventory();
+            }
+            if (typeof updateAdminStats === 'function') {
+                updateAdminStats();
+            }
+        });
+    </script>
+</body>
+</html>

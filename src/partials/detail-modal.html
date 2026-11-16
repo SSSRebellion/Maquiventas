@@ -1,0 +1,57 @@
+<!-- ==================== MODAL DE FICHA TÉCNICA E IMAGEN INTERACTIVA (Solo texto corporativo limpio) ==================== -->
+<div id="detail-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 820px;">
+        <div class="modal-header">
+            <div>
+                <span id="detail-modal-category" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.5px;">Categoría</span>
+                <h2 id="detail-modal-title" class="modal-title">Ficha Técnica de Equipo</h2>
+            </div>
+            <button class="modal-close-btn" onclick="closeModal('detail-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="detail-modal-grid">
+                <div class="detail-gallery">
+                    <div class="detail-main-img-wrap">
+                        <img id="detail-main-display-img" src="" alt="Maquinaria" class="detail-main-img">
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase;">
+                        Perspectivas y Ángulos Técnicos:
+                    </div>
+                    <div id="detail-gallery-thumbs" class="detail-thumbs-strip"></div>
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 700;">Precio de Comercialización:</span>
+                        <div id="detail-modal-price" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--dark-900);">$0</div>
+                    </div>
+                    <div id="detail-modal-stock" style="font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem;">
+                        En stock
+                    </div>
+
+                    <table class="detail-specs-table">
+                        <tbody id="detail-specs-body"></tbody>
+                    </table>
+
+                    <button id="detail-modal-buy-btn" class="btn btn-primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem; font-size: 0.95rem; font-weight: 800;">
+                        Comprar y Facturar Ahora
+                    </button>
+
+                    <div class="detail-actions-row">
+                        <button type="button" class="btn-proforma-quote" onclick="generateProformaQuoteFromDetail()">
+                            Generar Cotización Proforma
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="openLeasingFromDetail()" style="font-size: 0.9rem; font-weight: 700;">
+                            Simular Leasing
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('detail-modal')">
+                Cerrar Ficha
+            </button>
+        </div>
+    </div>
+</div>

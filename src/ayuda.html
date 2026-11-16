@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Centro de Ayuda Oficial Maqui Ventas - Soporte técnico, preguntas frecuentes, garantía Caterpillar y atención personalizada.">
+    <meta name="theme-color" content="#FFCD00">
+    <title>Centro de Ayuda & Soporte Técnico | Maqui Ventas CAT</title>
+    <!-- Google Fonts Caterpillar Inspired (Barlow Condensed, Barlow & Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto+Condensed:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="industrial-ribbon"></div>
+
+    <!-- Navigation Header Estilo GECOLSA CAT (Solo texto limpio) -->
+    <header class="navbar cat-navbar">
+        <div class="cat-nav-top-row">
+            <a href="index.html" class="cat-brand-wrapper" title="Maqui Ventas - Distribuidor Autorizado CAT">
+                <div class="cat-brand-dealer">MAQUI VENTAS</div>
+                <div class="cat-brand-emblem">CAT<span class="cat-triangle">▲</span></div>
+            </a>
+
+            <div class="cat-search-dual-bar">
+                <button type="button" class="cat-search-addon-btn" onclick="window.location.href='catalogo.html'">
+                    <span>Agregar equipo</span>
+                    <span style="font-size: 0.65rem; margin-left: 4px;">▼</span>
+                </button>
+                <input type="text" id="top-cat-search" class="cat-search-field" placeholder="Buscar por número o nombre de maquinaria..." oninput="syncCatalogSearch(this.value)">
+                <button type="button" class="cat-search-btn-submit" onclick="window.location.href='catalogo.html'" title="Buscar maquinaria">
+                    Buscar
+                </button>
+            </div>
+
+            <div class="cat-nav-right">
+                <div class="cat-nav-meta-item">
+                    <div style="font-size: 0.75rem; line-height: 1.2;">
+                        <div style="font-weight: 700; color: #fff;">Sede Central Bogotá</div>
+                        <div style="color: #94a3b8;">Distribuidor Autorizado</div>
+                    </div>
+                </div>
+
+                <a href="catalogo.html" class="cat-nav-link-btn" title="Ir al Catálogo de Maquinaria">
+                    Catálogo
+                </a>
+                <a href="cotizador.html" class="cat-nav-link-btn" title="Simulador de Leasing & Cotizaciones">
+                    Financiamiento
+                </a>
+                <a href="ayuda.html" class="cat-nav-link-btn active" title="Centro de Ayuda">
+                    Centro de ayuda
+                </a>
+            </div>
+        </div>
+
+        <div class="cat-nav-sub-row">
+            <div class="cat-sub-left">
+                <a href="index.html" class="cat-sub-item">Inicio</a>
+                <a href="catalogo.html" class="cat-sub-item">Todos los Equipos</a>
+                <a href="cotizador.html" class="cat-sub-item">Planes de Leasing</a>
+                <span class="cat-sub-item active">Centro de Ayuda Corporativo</span>
+            </div>
+            <div class="cat-sub-right">
+                <a href="catalogo.html" class="cat-sub-link">Lista de Equipos</a>
+                <a href="cotizador.html" class="cat-sub-link">Cotizador Formal</a>
+                <span class="cat-sub-link" onclick="openOrderHistoryModal()">Historial de pedidos</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="toast-container"></div>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        
+        <!-- Header del Centro de Ayuda -->
+        <div style="margin-bottom: 2.5rem; border-bottom: 3px solid var(--cat-yellow); padding-bottom: 1.25rem;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--cat-yellow); background: var(--cat-black); display: inline-block; padding: 4px 10px; border-radius: var(--radius-xs); text-transform: uppercase; margin-bottom: 8px;">
+                SERVICIO AL CLIENTE · POSTVENTA & GARANTÍA
+            </div>
+            <h1 style="font-family: var(--font-heading); font-size: 2.8rem; font-weight: 900; color: var(--cat-black); text-transform: uppercase; line-height: 1;">
+                Centro de Ayuda & Asistencia Técnica
+            </h1>
+            <p style="color: var(--cat-gray-700); font-size: 1.05rem; max-width: 860px; margin-top: 6px;">
+                Consulte las respuestas a dudas habituales sobre despacho en cama baja, condiciones de garantía oficial de fábrica, esquemas de leasing o radique directamente un ticket de asistencia técnica con respuesta prioritaria.
+            </p>
+        </div>
+
+        <!-- Canales de Atención Rápida -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 3rem;">
+            <div class="help-contact-card">
+                <div class="help-contact-title">Mesa de Ayuda PBX</div>
+                <div class="help-contact-desc">Atención telefónica de lunes a sábado de 7:00 a.m. a 6:00 p.m.</div>
+                <div class="help-contact-val">+57 (601) 800-MAQUI</div>
+                <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Línea Gratuita Nacional: 01 8000 914 200</div>
+            </div>
+
+            <div class="help-contact-card">
+                <div class="help-contact-title">Emergencia Operacional 24/7</div>
+                <div class="help-contact-desc">Asistencia técnica prioritaria para maquinaria detenida en faena.</div>
+                <div class="help-contact-val">+57 (315) 880-9920</div>
+                <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Guardia técnica permanente en todo el país</div>
+            </div>
+
+            <div class="help-contact-card">
+                <div class="help-contact-title">Soporte Escrito & Garantías</div>
+                <div class="help-contact-desc">Recepción de documentación técnica y radicados de garantía.</div>
+                <div class="help-contact-val">soporte@maquiventas.com</div>
+                <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Respuesta técnica en menos de 2 horas</div>
+            </div>
+
+            <div class="help-contact-card">
+                <div class="help-contact-title">Patio Central de Entrega</div>
+                <div class="help-contact-desc">Inspección pre-entrega (PDI) y pruebas de rendimiento.</div>
+                <div class="help-contact-val">Km 2.5 Vía Funza - Cota</div>
+                <div style="font-size: 0.8rem; color: var(--cat-gray-600); margin-top: 4px;">Parque Industrial Terrapuerto</div>
+            </div>
+        </div>
+
+        <!-- Grid Principal: Preguntas Frecuentes y Formulario de Radicación -->
+        <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 2.5rem; align-items: start;">
+            
+            <!-- Columna Izquierda: FAQ Acordeón -->
+            <div>
+                <h2 style="font-family: var(--font-heading); font-size: 1.8rem; color: var(--cat-black); text-transform: uppercase; margin-bottom: 1rem; border-bottom: 2px solid var(--cat-yellow); padding-bottom: 0.5rem;">
+                    Preguntas Frecuentes de Contratistas
+                </h2>
+
+                <div class="faq-accordion">
+                    <div class="faq-item active">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cómo se coordina el despacho y entrega de maquinaria en cama baja?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Todos nuestros equipos son transportados en tractocamiones de cama baja debidamente asegurados y escoltados según la normatividad vial nacional. Una vez confirmada la adquisición o aprobado el leasing, nuestro departamento de logística coordina la fecha y coordenadas exactas de descarga en su frente de obra, campamento o patio de acopio en un plazo de 24 a 72 horas hábiles.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Qué cobertura incluye la Garantía Oficial de Fábrica?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>La garantía oficial cubre defectos de manufactura en tren de fuerza (motor, transmisión, mandos finales y bombas hidráulicas principales) por un periodo de hasta 3 años o 5,000 horas de operación (lo que ocurra primero). Incluye la primera revisión técnica de pre-entrega (PDI) y mano de obra certificada en nuestros talleres autorizados.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cuáles son los requisitos para acceder al Leasing Financiero CAT?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>El leasing está dirigido a personas jurídicas y contratistas con actividad económica verificable. Se requiere RUT actualizado, estados financieros de los dos últimos ejercicios contables y extractos bancarios de los últimos 3 meses. El estudio de crédito toma menos de 24 horas y permite plazos desde 12 hasta 60 meses con tasas preferenciales.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Qué documentación legal y tributaria se entrega con cada equipo?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Junto con el equipo se entrega Factura Electrónica de Venta avalada por la DIAN con código CUFE, declaración y manifiesto de aduana / importación nacionalizada, certificación técnica de alistamiento PDI, catálogo de partes y manuales oficiales de operación y mantenimiento en español.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cómo solicitar mantenimiento preventivo o repuestos en terreno?</span>
+                            <span class="faq-indicator">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Contamos con unidades móviles de taller de campo para asistencia técnica directamente en mina u obra. Puede agendar el servicio comunicándose a la línea técnica PBX (601) 800-MAQUI ext. 402 o mediante el formulario de radicación de tickets de este centro de ayuda.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Radicación de Ticket Directo -->
+            <div style="background: var(--white); border: 1.5px solid var(--cat-gray-300); border-top: 4px solid var(--cat-yellow); border-radius: var(--radius-sm); padding: 1.75rem; box-shadow: var(--shadow-sm);">
+                <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--cat-black); text-transform: uppercase; margin-bottom: 0.5rem;">
+                    Radicar Solicitud Técnica
+                </h2>
+                <p style="font-size: 0.88rem; color: var(--cat-gray-600); margin-bottom: 1.25rem;">
+                    Genere un ticket formal de seguimiento. Un ingeniero de soporte se contactará en menos de 2 horas hábiles.
+                </p>
+
+                <form id="help-page-ticket-form" onsubmit="event.preventDefault(); submitHelpTicket(this);">
+                    <div class="form-group">
+                        <label>Nombre y Apellidos *</label>
+                        <input type="text" class="form-control" placeholder="Ej. Carlos Mendoza" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Empresa / Consorcio</label>
+                        <input type="text" class="form-control" placeholder="Ej. Constructora del Norte S.A.S.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correo Electrónico Corporativo *</label>
+                        <input type="email" class="form-control" placeholder="carlos@constructora.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Teléfono Celular *</label>
+                        <input type="tel" class="form-control" placeholder="Ej. 310 123 4567" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo de Requerimiento *</label>
+                        <select class="form-control" style="cursor: pointer;" required>
+                            <option value="Soporte Técnico">Soporte Técnico y Mantenimiento en Obra</option>
+                            <option value="Consulta sobre Pedido">Seguimiento de Despacho y Entrega</option>
+                            <option value="Garantía de Fábrica">Reclamo o Trámite de Garantía</option>
+                            <option value="Asesoría Comercial">Asesoría de Compra o Financiación Leasing</option>
+                            <option value="Repuestos">Cotización de Repuestos Originales</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción del Requerimiento *</label>
+                        <textarea class="form-control" rows="4" placeholder="Indique modelo de equipo, ubicación de obra o inquietud técnica..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; font-weight: 800;">
+                        Radicar Ticket Formal
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Corporativo (Solo Texto Limpio) -->
+    <footer class="cat-footer">
+        <div class="cat-footer-container">
+            <div class="cat-footer-brand">
+                <div class="cat-footer-brand-name">MAQUI VENTAS CAT</div>
+                <p>Distribuidor Oficial de maquinaria pesada, componentes y planes de leasing financiero Caterpillar Financial.</p>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio Corporativo</a></li>
+                    <li><a href="catalogo.html">Catálogo Completo</a></li>
+                    <li><a href="cotizador.html">Cotizador de Leasing</a></li>
+                    <li><a href="ayuda.html">Centro de Ayuda</a></li>
+                    <li><a href="admin.html">Portal de Inventario</a></li>
+                </ul>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><span>Autopista Medellín Km 3.5, Cota</span></li>
+                    <li><span>PBX (601) 8000-MAQUI</span></li>
+                    <li><span>ventas@maquiventas.com</span></li>
+                </ul>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Garantía & Servicio</h4>
+                <ul>
+                    <li><span>Soporte en Campo</span></li>
+                    <li><span>Garantía de Fábrica 3 Años</span></li>
+                    <li><span>Repuestos Originales</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="cat-footer-bottom">
+            <div>&copy; 2026 Maqui Ventas S.A.S. - Distribuidor Autorizado de Maquinaria Pesada.</div>
+        </div>
+    </footer>
+
+    <!-- Scripts de la Aplicación -->
+    <script src="js/app.js"></script>
+</body>
+</html>

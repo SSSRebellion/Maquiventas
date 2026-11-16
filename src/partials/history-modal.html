@@ -1,0 +1,22 @@
+<!-- Purchase History & Invoices Modal -->
+<div id="history-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 680px;">
+        <div class="modal-header">
+            <div>
+                <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.5px;">Trazabilidad de Maquinaria</span>
+                <h2 class="modal-title">Historial de Adquisiciones</h2>
+            </div>
+            <button class="modal-close-btn" onclick="closeModal('history-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="history-orders-list">
+                <!-- Se listan dinámicamente las compras previas -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="closeModal('history-modal')">
+                Cerrar Historial
+            </button>
+        </div>
+    </div>
+</div>

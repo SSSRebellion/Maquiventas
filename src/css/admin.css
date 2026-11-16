@@ -1,0 +1,174 @@
+/* ========================================================
+   MAQUI VENTAS - ADMIN PANEL & INVENTORY (CU-09)
+   ======================================================== */
+
+.admin-dashboard-metrics, .admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card, .admin-stat-card {
+    background: var(--white);
+    padding: 1.25rem;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--cat-gray-200);
+    border-left: 5px solid var(--cat-yellow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.metric-label, .stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    color: var(--cat-gray-600);
+    margin-bottom: 0.25rem;
+}
+
+.metric-val, .stat-value {
+    font-family: var(--font-heading);
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: var(--cat-black);
+}
+
+/* Admin Toolbar */
+.admin-toolbar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    background: var(--white);
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.dropzone-box {
+    border: 2px dashed var(--gray-400);
+    border-radius: var(--radius-sm);
+    background: var(--gray-50);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.dropzone-box:hover, .dropzone-box.drag-active {
+    border-color: var(--primary);
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.dropzone-icon {
+    font-size: 2.2rem;
+    line-height: 1;
+}
+
+.dropzone-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dark-900);
+}
+
+.dropzone-subtitle {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+}
+
+.image-preview-container {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    background: var(--white);
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.image-preview-thumb {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-300);
+}
+
+.image-preview-info {
+    flex: 1;
+    text-align: left;
+}
+
+.image-preview-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--dark-900);
+    word-break: break-all;
+}
+
+.image-preview-meta {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+}
+
+/* Inventory Table */
+.inventory-table-container {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--cat-gray-200);
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.inventory-table th {
+    background: var(--cat-charcoal-900);
+    color: var(--white);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    padding: 0.85rem 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.inventory-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: middle;
+}
+
+.inventory-table tr:hover {
+    background: var(--cat-gray-100);
+}
+
+.table-thumb {
+    width: 52px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--gray-300);
+}

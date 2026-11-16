@@ -1,0 +1,192 @@
+<!-- ==================== PASARELA DE PAGOS FINTECH MODAL (Solo texto corporativo limpio) ==================== -->
+<div id="payment-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 840px; position: relative;">
+        
+        <!-- Overlay animado de procesamiento bancario -->
+        <div id="gateway-processing" class="gateway-processing-overlay hidden">
+            <div class="gateway-spinner"></div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem;">Procesando Pago Seguro</h3>
+            <p style="font-size: 0.9rem; color: #cbd5e1; max-width: 380px;">Conectando de forma cifrada con la pasarela bancaria y verificando fondos...</p>
+            <div style="font-size: 0.78rem; color: var(--primary); margin-top: 1rem; font-family: monospace;">ENCRYPTION SSL 256-BIT ACTIVE</div>
+        </div>
+
+        <div class="modal-header">
+            <div>
+                <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.5px;">Checkout Seguro SSL 256-Bit</span>
+                <h2 class="modal-title">Pasarela de Pagos & Leasing Maquinaria</h2>
+            </div>
+            <button class="modal-close-btn" onclick="closeModal('payment-modal')">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="gateway-wrapper">
+                <!-- Formulario de Pago y Pestañas -->
+                <div>
+                    <div class="gateway-tabs">
+                        <button class="gateway-tab-btn active" data-method="card" onclick="selectPaymentTab('card')">
+                            <span>Tarjeta Crédito / Débito</span>
+                        </button>
+                        <button class="gateway-tab-btn" data-method="pse" onclick="selectPaymentTab('pse')">
+                            <span>PSE / Transferencia</span>
+                        </button>
+                        <button class="gateway-tab-btn" data-method="leasing" onclick="selectPaymentTab('leasing')">
+                            <span>Leasing Financiero CAT</span>
+                        </button>
+                    </div>
+
+                    <!-- 1. Tarjeta de Crédito / Débito -->
+                    <div id="gateway-form-card">
+                        <div class="card-visual-mockup">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <div class="card-chip-sim"></div>
+                                <span style="font-size: 0.85rem; font-weight: 800; letter-spacing: 1px;">VISA CORPORATE</span>
+                            </div>
+                            <div id="sim-card-num" class="card-num-sim">•••• •••• •••• ••••</div>
+                            <div class="card-details-sim">
+                                <div>
+                                    <span>TITULAR:</span>
+                                    <strong id="sim-card-holder">CLIENTE EMPRESARIAL</strong>
+                                </div>
+                                <div>
+                                    <span>VENCE:</span>
+                                    <strong id="sim-card-expiry">MM/AA</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form onsubmit="event.preventDefault(); processPayment();">
+                            <div class="form-group">
+                                <label>Número de Tarjeta Corporativa</label>
+                                <input type="text" id="card-number" class="form-control" placeholder="4532 8912 3456 7890" maxlength="19" required oninput="formatCardNumber(this)">
+                            </div>
+                            <div class="form-group">
+                                <label>Nombre del Titular (Como figura en la tarjeta)</label>
+                                <input type="text" id="card-name" class="form-control" placeholder="JUAN PABLO RIOS" required oninput="updateCardHolder(this)">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label>Fecha de Expiración</label>
+                                    <input type="text" id="card-exp" class="form-control" placeholder="MM/AA" maxlength="5" required oninput="updateCardExpiry(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Código CVV / CVC</label>
+                                    <input type="password" id="card-cvv" class="form-control" placeholder="•••" maxlength="4" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Cuotas de Financiación</label>
+                                <select class="form-control" style="cursor: pointer;">
+                                    <option value="1">1 Cuota (Sin Intereses)</option>
+                                    <option value="6">6 Cuotas</option>
+                                    <option value="12" selected>12 Cuotas Industriales</option>
+                                    <option value="24">24 Cuotas de Capital</option>
+                                    <option value="36">36 Cuotas Maquinaria Pesada</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; margin-top: 0.5rem; font-weight: 800;">
+                                Pagar <span id="gateway-pay-btn-amount">$0 USD</span> con Tarjeta
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 2. Transferencia PSE -->
+                    <div id="gateway-form-pse" class="hidden">
+                        <form onsubmit="event.preventDefault(); processPayment();">
+                            <div class="form-group">
+                                <label>Entidad Bancaria</label>
+                                <select class="form-control" style="cursor: pointer;" required>
+                                    <option value="">Selecciona tu Banco...</option>
+                                    <option value="bancolombia">Bancolombia</option>
+                                    <option value="bogota">Banco de Bogotá</option>
+                                    <option value="davivienda">Davivienda</option>
+                                    <option value="bbva">BBVA Colombia</option>
+                                    <option value="occidente">Banco de Occidente</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Cliente</label>
+                                <select class="form-control" style="cursor: pointer;">
+                                    <option value="juridica">Persona Jurídica (Empresa)</option>
+                                    <option value="natural">Persona Natural</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Número de Identificación / NIT</label>
+                                <input type="text" class="form-control" placeholder="Ej. 900584219-4" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; margin-top: 0.5rem; font-weight: 800;">
+                                Continuar al Banco vía PSE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 3. Leasing / Línea de Crédito Empresarial -->
+                    <div id="gateway-form-leasing" class="hidden">
+                        <div style="background: var(--gray-50); border: 1.5px solid var(--cat-yellow); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                            <strong style="color: var(--cat-black); display: flex; align-items: center; gap: 6px; font-family: var(--font-heading); font-size: 1.05rem;">
+                                LEASING FINANCIERO CATERPILLAR FINANCIAL
+                            </strong>
+                            <p style="color: var(--gray-600); margin-top: 4px;">Financiación flexible hasta 60 meses con tasas corporativas preferenciales y opción de compra al 1%.</p>
+                        </div>
+                        <form onsubmit="event.preventDefault(); processPayment();">
+                            <div class="form-group">
+                                <label>Razón Social / Empresa Solicitante</label>
+                                <input type="text" class="form-control" placeholder="Ej. Consorcio Vías y Puentes S.A.S." required>
+                            </div>
+                            <div class="form-group">
+                                <label>NIT de la Empresa</label>
+                                <input type="text" class="form-control" placeholder="Ej. 901.442.810-7" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Plazo del Plan Leasing</label>
+                                <select class="form-control" id="leasing-term-select" style="cursor: pointer;">
+                                    <option value="12">12 Meses · Amortización Acelerada</option>
+                                    <option value="24">24 Meses · Tasa 8.9% E.A.</option>
+                                    <option value="36" selected>36 Meses · Recomendado Obras Civiles</option>
+                                    <option value="48">48 Meses · Cuota Mínima Garantizada</option>
+                                    <option value="60">60 Meses · Gran Infraestructura y Minería</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Porcentaje de Cuota Inicial (Down Payment)</label>
+                                <select class="form-control" id="leasing-down-percent" style="cursor: pointer;">
+                                    <option value="0.10">10% Inicial ($)</option>
+                                    <option value="0.20" selected>20% Inicial ($)</option>
+                                    <option value="0.30">30% Inicial ($)</option>
+                                    <option value="0.50">50% Inicial ($)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; margin-top: 0.5rem; font-weight: 800;">
+                                Solicitar Aprobación Inmediata de Leasing
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Resumen Previo de Compra en Pasarela -->
+                <div class="gateway-summary-box">
+                    <div class="gateway-summary-title">Resumen de la Orden</div>
+                    <div id="gateway-summary-items" style="max-height: 220px; overflow-y: auto; margin-bottom: 1rem;">
+                        <!-- Ítems se listan dinámicamente -->
+                    </div>
+                    <div style="border-top: 1px solid var(--gray-200); padding-top: 10px; margin-top: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--gray-600); margin-bottom: 4px;">
+                            <span>Moneda:</span>
+                            <strong>Dólares (USD)</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: var(--dark-900);">
+                            <span>Total a Debitar:</span>
+                            <span id="gateway-total-amount" style="color: var(--primary-dark);">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('payment-modal'); openCart();">
+                Volver al Carrito
+            </button>
+        </div>
+    </div>
+</div>

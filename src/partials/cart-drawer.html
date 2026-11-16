@@ -1,0 +1,36 @@
+<!-- Shopping Cart Slide-out Drawer (Solo texto corporativo limpio) -->
+<div id="cart-drawer-overlay" class="cart-drawer-overlay" onclick="if(event.target === this) closeCart();">
+    <aside class="cart-drawer" aria-label="Carrito de compras">
+        <div class="cart-drawer-header">
+            <div class="cart-drawer-title">
+                <span>PEDIDO DE MAQUINARIA</span>
+            </div>
+            <button class="modal-close-btn" onclick="closeCart()" style="color: var(--white);" title="Cerrar carrito">&times;</button>
+        </div>
+
+        <div class="cart-drawer-body" id="cart-items-container">
+            <!-- Dynamic Cart Items injected here -->
+        </div>
+
+        <div class="cart-drawer-footer">
+            <div class="cart-summary-row">
+                <span>Subtotal Maquinaria:</span>
+                <strong id="cart-subtotal">$0 USD</strong>
+            </div>
+            <div class="cart-summary-row">
+                <span>Descuento Corporativo:</span>
+                <strong id="cart-discount" style="color: var(--success);">$0 USD</strong>
+            </div>
+            <div class="cart-summary-total">
+                <span>Total Estimado:</span>
+                <span id="cart-total" style="color: var(--cat-black);">$0 USD</span>
+            </div>
+            <button id="cart-checkout-btn" class="btn btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem; margin-bottom: 0.75rem; font-weight: 800;" onclick="openPaymentGateway()">
+                Tramitar Adquisición y Pago
+            </button>
+            <button class="btn btn-outline" style="width: 100%; padding: 0.6rem; font-size: 0.85rem;" onclick="clearCart()">
+                Vaciar Carrito
+            </button>
+        </div>
+    </aside>
+</div>

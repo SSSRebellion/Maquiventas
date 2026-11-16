@@ -1,0 +1,130 @@
+/* ========================================================
+   MAQUI VENTAS - CENTRO DE AYUDA (HELP CENTER & FAQ)
+   Caterpillar Corporate Customer Support
+   ======================================================== */
+
+.help-tab-btn {
+    padding: 0.65rem 1.25rem;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--cat-gray-600);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.help-tab-btn:hover {
+    color: var(--cat-black);
+}
+
+.help-tab-btn.active {
+    color: var(--cat-black);
+    border-bottom-color: var(--cat-yellow);
+}
+
+/* FAQ Acordeón */
+.faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.faq-item {
+    border: 1px solid var(--cat-gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    overflow: hidden;
+    transition: var(--transition-fast);
+}
+
+.faq-item:hover {
+    border-color: var(--cat-yellow);
+}
+
+.faq-question {
+    width: 100%;
+    text-align: left;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--cat-gray-900);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition-fast);
+}
+
+.faq-question:hover {
+    background: var(--cat-gray-100);
+    color: var(--cat-black);
+}
+
+.faq-indicator {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--cat-yellow-hover);
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.faq-item.active .faq-indicator {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--cat-gray-700);
+    border-top: 1px solid var(--cat-gray-100);
+    background: var(--cat-gray-50);
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+    padding-top: 1rem;
+}
+
+/* Tarjetas de Canales de Atención */
+.help-contact-card {
+    background: var(--cat-gray-100);
+    border: 1px solid var(--cat-gray-200);
+    border-left: 4px solid var(--cat-yellow);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.help-contact-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--cat-black);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.help-contact-desc {
+    font-size: 0.85rem;
+    color: var(--cat-gray-600);
+}
+
+.help-contact-val {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--cat-black);
+    margin-top: 0.35rem;
+}

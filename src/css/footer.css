@@ -1,0 +1,108 @@
+/* ========================================================
+   MAQUI VENTAS - CORPORATE FOOTER (GECOLSA / CATERPILLAR)
+   ======================================================== */
+
+.cat-footer {
+    background: var(--cat-black);
+    color: var(--cat-gray-300);
+    padding: 2.5rem 2rem 1.5rem;
+    margin-top: auto;
+    border-top: 4px solid var(--cat-yellow);
+}
+
+.cat-footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .cat-footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .cat-footer-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cat-footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cat-footer-brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: var(--cat-yellow);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.cat-footer-brand p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #A0AEC0;
+}
+
+.cat-footer-col h4 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--cat-white);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--cat-yellow);
+    display: inline-block;
+}
+
+.cat-footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cat-footer-col li {
+    padding: 0.25rem 0;
+}
+
+.cat-footer-col a,
+.cat-footer-col span {
+    color: #A0AEC0;
+    text-decoration: none;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.cat-footer-col a:hover,
+.cat-footer-col span:hover {
+    color: var(--cat-yellow);
+}
+
+.cat-footer-bottom {
+    max-width: 1280px;
+    margin: 2rem auto 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--cat-charcoal-700);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: #666;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.cat-footer-bottom a {
+    color: var(--cat-yellow);
+    text-decoration: none;
+}

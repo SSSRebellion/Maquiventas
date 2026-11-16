@@ -1,0 +1,24 @@
+<!-- Confirmation Dialog Modal (Solo texto corporativo limpio) -->
+<div id="confirm-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 440px; text-align: center;">
+        <div class="modal-body" style="padding: 2rem 1.5rem;">
+            <div style="font-family: var(--font-heading); font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--danger); background: var(--danger-light); padding: 4px 12px; border-radius: var(--radius-xs); display: inline-block; margin-bottom: 1rem;">
+                Confirmación Requerida
+            </div>
+            <h3 id="confirm-modal-title" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--dark-900);">
+                ¿Confirmar Acción?
+            </h3>
+            <p id="confirm-modal-msg" style="color: var(--gray-600); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                Esta acción no se puede deshacer.
+            </p>
+            <div style="display: flex; gap: 0.75rem;">
+                <button id="confirm-modal-cancel" class="btn btn-outline" style="flex: 1;" onclick="closeConfirmModal(false)">
+                    Cancelar
+                </button>
+                <button id="confirm-modal-ok" class="btn btn-danger" style="flex: 1; font-weight: 800;" onclick="closeConfirmModal(true)">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

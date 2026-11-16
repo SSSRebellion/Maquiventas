@@ -1,0 +1,35 @@
+{
+  "name": "maqui-ventas-react-vite",
+  "version": "2.0.0",
+  "description": "Sistema web para la gestión y comercialización de maquinaria pesada con React, Vite, Carrito de Compras, Pasarela de Pagos e Historial de Pedidos",
+  "main": "src/js/app.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js",
+    "test:unit": "node test.js",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run --spec 'cypress/e2e/maqui_ventas.cy.js'"
+  },
+  "keywords": [
+    "react",
+    "vite",
+    "maqui-ventas",
+    "shopping-cart",
+    "payment-gateway",
+    "cypress",
+    "e2e"
+  ],
+  "author": "Maqui Ventas Engineering Team",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "cypress": "^13.17.0",
+    "vite": "^5.4.11"
+  }
+}

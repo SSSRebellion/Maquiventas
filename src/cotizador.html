@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simulador de Leasing Financiero y Generador de Cotizaciones Proforma para Maquinaria Pesada - Caterpillar Financial.">
+    <meta name="theme-color" content="#FFCD00">
+    <title>Cotizador Proforma & Simulador Leasing | Maqui Ventas CAT</title>
+    <!-- Google Fonts Caterpillar Inspired (Barlow Condensed, Barlow & Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto+Condensed:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="industrial-ribbon"></div>
+
+    <!-- Navigation Header Estilo GECOLSA CAT (Solo texto corporativo limpio) -->
+    <header class="navbar cat-navbar">
+        <div class="cat-nav-top-row">
+            <a href="index.html" class="cat-brand-wrapper" title="Maqui Ventas - Distribuidor Autorizado CAT">
+                <div class="cat-brand-dealer">MAQUI VENTAS</div>
+                <div class="cat-brand-emblem">CAT<span class="cat-triangle">▲</span></div>
+            </a>
+
+            <div class="cat-search-dual-bar">
+                <input type="text" id="top-cat-search" class="cat-search-field" placeholder="Buscar maquinaria para cotizar..." oninput="syncCatalogSearch(this.value)">
+                <button type="button" class="cat-search-btn-submit" onclick="window.location.href='catalogo.html'" title="Ver catálogo">
+                    Buscar
+                </button>
+            </div>
+
+            <div class="cat-nav-right">
+                <a href="catalogo.html" class="cat-nav-link-btn" title="Ir al Catálogo de Maquinaria">
+                    <span>Catálogo</span>
+                </a>
+                <a href="cotizador.html" class="cat-nav-link-btn active" title="Cotizador y Leasing">
+                    <span>Cotizador Proforma</span>
+                </a>
+                <a href="ayuda.html" class="cat-nav-link-btn" title="Centro de Ayuda">
+                    <span>Centro de ayuda</span>
+                </a>
+                <a href="admin.html" class="cat-nav-link-btn" title="Portal Administrador">
+                    <span>Inventario</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="cat-nav-sub-row">
+            <div class="cat-sub-left">
+                <a href="index.html" class="cat-sub-item">Inicio</a>
+                <a href="catalogo.html" class="cat-sub-item">Flota Disponible</a>
+                <span class="cat-sub-item active">Simulador de Financiamiento CAT Financial</span>
+            </div>
+            <div class="cat-sub-right">
+                <span class="cat-sub-link">Línea Corporativa Leasing: (601) 8000-MAQUI</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="toast-container"></div>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        
+        <!-- Header del Cotizador -->
+        <div style="margin-bottom: 2rem; border-bottom: 3px solid var(--cat-yellow); padding-bottom: 1rem;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--cat-yellow); background: var(--cat-black); display: inline-block; padding: 4px 10px; border-radius: var(--radius-xs); text-transform: uppercase; margin-bottom: 8px;">
+                CATERPILLAR FINANCIAL SERVICES · PLANES INDUSTRIALES
+            </div>
+            <h1 style="font-family: var(--font-heading); font-size: 2.8rem; font-weight: 900; color: var(--cat-black); text-transform: uppercase; line-height: 1;">
+                Simulador de Leasing & Cotización Proforma
+            </h1>
+            <p style="color: var(--cat-gray-700); font-size: 1.05rem; max-width: 820px; margin-top: 6px;">
+                Calcule las cuotas mensuales de amortización acelerada para la adquisición de flota pesada, configure el anticipo de capital y genere de inmediato una cotización formal en papel membretado válida por 30 días para licitaciones u obras civiles.
+            </p>
+        </div>
+
+        <!-- Grid de Simulación y Resultado Proforma -->
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: start;">
+            
+            <!-- Columna Izquierda: Parámetros del Leasing -->
+            <div class="leasing-calculator-container" style="background: var(--white); border: 1.5px solid var(--cat-gray-300); padding: 1.75rem; border-radius: var(--radius-sm); box-shadow: var(--shadow-cat);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 2px solid var(--cat-yellow); padding-bottom: 0.75rem;">
+                    <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--cat-black); margin: 0; text-transform: uppercase;">
+                        1. Configuración de Financiamiento
+                    </h2>
+                    <span class="leasing-rate-badge">TASA 8.9% E.A. CORPORATIVA</span>
+                </div>
+
+                <!-- Selección de Equipo -->
+                <div class="form-group">
+                    <label style="font-weight: 700; font-size: 0.95rem; color: var(--cat-gray-900);">Seleccione Maquinaria del Patio:</label>
+                    <select id="cotizador-machine-select" class="form-control" style="font-size: 1rem; padding: 0.85rem; font-weight: 700; cursor: pointer;" onchange="updateCotizadorCalculations()">
+                        <!-- Se llena dinámicamente con inventario -->
+                    </select>
+                </div>
+
+                <!-- Precio del Equipo Seleccionado -->
+                <div style="background: var(--cat-gray-100); padding: 1rem; border-radius: var(--radius-xs); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--cat-yellow);">
+                    <div>
+                        <span style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--cat-gray-600);">Precio de Lista (USD):</span>
+                        <div id="cotizador-unit-price" style="font-family: var(--font-heading); font-size: 2rem; font-weight: 900; color: var(--cat-black); line-height: 1;">$185,000</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 0.75rem; color: var(--cat-gray-500); font-weight: 700;">DISPONIBILIDAD:</span>
+                        <div id="cotizador-stock-status" style="font-weight: 800; color: var(--success); font-size: 0.9rem;">En Patio (3 unidades)</div>
+                    </div>
+                </div>
+
+                <!-- Slider de Cuota Inicial -->
+                <div class="leasing-slider-group">
+                    <div class="leasing-slider-label">
+                        <span>Anticipo / Cuota Inicial (Down Payment):</span>
+                        <strong id="cotizador-down-label" style="color: var(--cat-black); font-size: 1.05rem;">20% ($37,000 USD)</strong>
+                    </div>
+                    <input type="range" id="cotizador-down-slider" min="10" max="50" step="5" value="20" class="leasing-slider" oninput="updateCotizadorCalculations()">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--cat-gray-500); margin-top: 4px;">
+                        <span>10% Mínimo</span>
+                        <span>20% Estándar</span>
+                        <span>30% Recomendado</span>
+                        <span>50% Máximo</span>
+                    </div>
+                </div>
+
+                <!-- Plazo de Financiamiento -->
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label style="font-weight: 700; font-size: 0.95rem; color: var(--cat-gray-900);">Plazo de Financiamiento (Meses):</label>
+                    <div class="leasing-term-pills">
+                        <button type="button" class="term-pill-btn" onclick="selectCotizadorTerm(12)">12 Meses</button>
+                        <button type="button" class="term-pill-btn" onclick="selectCotizadorTerm(24)">24 Meses</button>
+                        <button type="button" class="term-pill-btn active" onclick="selectCotizadorTerm(36)">36 Meses</button>
+                        <button type="button" class="term-pill-btn" onclick="selectCotizadorTerm(48)">48 Meses</button>
+                        <button type="button" class="term-pill-btn" onclick="selectCotizadorTerm(60)">60 Meses</button>
+                    </div>
+                </div>
+
+                <!-- Opción de Compra Residual -->
+                <div style="margin-top: 1.25rem; background: var(--cat-gray-100); padding: 0.85rem 1rem; border-radius: var(--radius-xs); font-size: 0.85rem;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; color: var(--cat-gray-800);">
+                        <input type="checkbox" id="cotizador-residual-check" checked onchange="updateCotizadorCalculations()" style="width: 18px; height: 18px; accent-color: var(--cat-yellow);">
+                        Incluir Opción de Compra Final al 1% (Transferencia de Propiedad al Contratista)
+                    </label>
+                </div>
+
+                <!-- Resultado Destacado -->
+                <div class="leasing-result-card" style="margin-top: 1.5rem;">
+                    <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--cat-gray-400); font-weight: 700;">
+                        Cuota Mensual Estimada de Leasing:
+                    </div>
+                    <div class="leasing-monthly-fee" id="cotizador-monthly-val">$4,678 <span style="font-size: 1.1rem; color: var(--white); font-weight: 600;">USD/mes</span></div>
+                    <div style="font-size: 0.82rem; color: var(--cat-gray-300); margin-top: 4px; display: flex; justify-content: space-between;">
+                        <span>Financiación Neta: <strong id="cotizador-financed-val" style="color: var(--cat-yellow);">$148,000 USD</strong></span>
+                        <span>Plazo: <strong id="cotizador-term-val" style="color: var(--white);">36 Meses</strong></span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.25rem; display: flex; gap: 1rem;">
+                    <button type="button" class="btn btn-primary" style="flex: 1; padding: 0.9rem; font-size: 1rem; font-weight: 800;" onclick="showToast('Solicitud de pre-aprobación enviada al departamento de crédito CAT Financial. Nos contactaremos en menos de 2 horas hábiles.', 'success', 'Solicitud Radicada')">
+                        Solicitar Estudio Inmediato
+                    </button>
+                    <button type="button" class="btn btn-outline" style="padding: 0.9rem 1.25rem; font-size: 1rem; font-weight: 800;" onclick="window.print()">
+                        Imprimir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Vista Previa de Cotización Proforma en Membrete -->
+            <div id="proforma-preview-card" style="background: var(--white); border: 2px dashed var(--cat-gray-300); border-radius: var(--radius-sm); padding: 2rem; box-shadow: var(--shadow-sm); position: relative;">
+                
+                <div class="proforma-quote-badge">COTIZACIÓN OFICIAL</div>
+
+                <!-- Encabezado Membretado -->
+                <div style="border-bottom: 2px solid var(--cat-black); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+                    <div style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--cat-black); line-height: 1;">
+                        MAQUI VENTAS S.A.S.
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--cat-gray-600); margin-top: 4px;">
+                        Distribuidor Autorizado de Maquinaria Pesada & Caterpillar Financial<br>
+                        NIT: 900.584.219-4 · Parque Industrial Terrapuerto Km 2.5 Vía Funza<br>
+                        PBX: (601) 800-MAQUI · comercial@maquiventas.com
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: var(--cat-gray-100); padding: 1rem; border-radius: var(--radius-xs); font-size: 0.82rem; margin-bottom: 1.25rem;">
+                    <div>
+                        <div style="font-weight: 800; color: var(--cat-gray-500); text-transform: uppercase;">COTIZACIÓN FORMAL:</div>
+                        <div id="proforma-quote-code" style="font-family: monospace; font-size: 1rem; font-weight: 800; color: var(--cat-black);">COT-2026-8492</div>
+                        <div style="margin-top: 4px; color: var(--cat-gray-600);">Validez: <strong>30 Días Calendario</strong></div>
+                    </div>
+                    <div>
+                        <div style="font-weight: 800; color: var(--cat-gray-500); text-transform: uppercase;">CLIENTE / LICITANTE:</div>
+                        <div id="proforma-client-name" style="font-weight: 800; color: var(--cat-black);">Constructora & Obras Civiles S.A.S.</div>
+                        <div style="color: var(--cat-gray-600);">Atn: Departamento de Compras</div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Especificaciones de la Maquinaria -->
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1.25rem;">
+                    <thead>
+                        <tr style="background: var(--cat-charcoal-900); color: var(--white); font-family: var(--font-heading); text-transform: uppercase;">
+                            <th style="padding: 8px 10px; text-align: left;">Equipo y Ficha Técnica</th>
+                            <th style="padding: 8px 10px; text-align: right;">Total Cotizado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px 10px; border-bottom: 1px solid var(--cat-gray-200);">
+                                <strong id="proforma-machine-name" style="font-size: 1rem; color: var(--cat-black); display: block;">Excavadora Hidráulica XCMG XE225U</strong>
+                                <div id="proforma-machine-desc" style="font-size: 0.78rem; color: var(--cat-gray-600); margin-top: 4px;">
+                                    Motor Cummins QSB6.7 de 173 HP · Tier 4 Final · Balde 1.2 m³ HD · Cabina FOPS/ROPS
+                                </div>
+                                <div style="margin-top: 6px; font-size: 0.75rem; color: var(--cat-yellow); background: var(--cat-black); display: inline-block; padding: 2px 6px; border-radius: 2px;">
+                                    Garantía Extendida de Fábrica 3 Años o 5,000 Horas
+                                </div>
+                            </td>
+                            <td id="proforma-machine-price" style="padding: 12px 10px; text-align: right; font-family: var(--font-heading); font-size: 1.3rem; font-weight: 900; color: var(--cat-black); border-bottom: 1px solid var(--cat-gray-200); vertical-align: top;">
+                                $185,000 USD
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Condiciones Comerciales y Desglose Financiero -->
+                <div style="background: var(--cat-gray-50); border: 1px solid var(--cat-gray-200); border-radius: var(--radius-xs); padding: 1rem; font-size: 0.82rem; margin-bottom: 1.25rem;">
+                    <div style="font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: var(--cat-black);">
+                        Plan de Adquisición Financiera Seleccionado:
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Anticipo Inicial Requerido (20%):</span>
+                        <strong id="proforma-down-amount">$37,000 USD</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Monto Financiado con CAT Financial:</span>
+                        <strong id="proforma-financed-amount">$148,000 USD</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Plazo y Amortización:</span>
+                        <strong id="proforma-term-text">36 Meses Cuota Fija</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--cat-gray-300); padding-top: 6px; margin-top: 6px; font-size: 0.95rem;">
+                        <span style="font-weight: 800; color: var(--cat-black);">Canon Mensual Proforma:</span>
+                        <strong id="proforma-monthly-amount" style="color: var(--cat-black); font-size: 1.1rem;">$4,678 USD</strong>
+                    </div>
+                </div>
+
+                <!-- Sellos y Firmas Autorizadas -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 1rem; border-top: 1px dashed var(--cat-gray-400);">
+                    <div>
+                        <div class="proforma-dealer-seal">
+                            DISTRIBUIDOR AUTORIZADO CAT
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--cat-gray-500); margin-top: 4px;">
+                            Inspección PDI y Alistamiento Técnico Certificado
+                        </div>
+                    </div>
+                    <div style="text-align: right; width: 180px; border-top: 1.5px solid var(--cat-black); padding-top: 4px;">
+                        <div style="font-size: 0.78rem; font-weight: 700; color: var(--cat-black);">Ing. Gerencia Comercial</div>
+                        <div style="font-size: 0.68rem; color: var(--cat-gray-500);">Firma Digital Autorizada</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Corporativo (Solo Texto Limpio) -->
+    <footer class="cat-footer">
+        <div class="cat-footer-container">
+            <div class="cat-footer-brand">
+                <div class="cat-footer-brand-name">MAQUI VENTAS CAT</div>
+                <p>Distribuidor Oficial de maquinaria pesada, componentes y planes de leasing financiero Caterpillar Financial.</p>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio Corporativo</a></li>
+                    <li><a href="catalogo.html">Catálogo Completo</a></li>
+                    <li><a href="cotizador.html">Cotizador de Leasing</a></li>
+                    <li><a href="ayuda.html">Centro de Ayuda</a></li>
+                    <li><a href="admin.html">Portal de Inventario</a></li>
+                </ul>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><span>Autopista Medellín Km 3.5, Cota</span></li>
+                    <li><span>PBX (601) 8000-MAQUI</span></li>
+                    <li><span>ventas@maquiventas.com</span></li>
+                </ul>
+            </div>
+            <div class="cat-footer-col">
+                <h4>Garantía & Servicio</h4>
+                <ul>
+                    <li><span>Soporte 24/7 en Campo</span></li>
+                    <li><span>Garantía de Fábrica 3 Años</span></li>
+                    <li><span>Repuestos Originales</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="cat-footer-bottom">
+            <div>&copy; 2026 Maqui Ventas S.A.S. - Distribuidor Autorizado de Maquinaria Pesada.</div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script>
+        let currentCotizadorTerm = 36;
+
+        function populateCotizadorDropdown() {
+            const select = document.getElementById('cotizador-machine-select');
+            if (!select || !Array.isArray(inventory)) return;
+            select.innerHTML = '';
+            inventory.forEach(function(item) {
+                const opt = document.createElement('option');
+                opt.value = item.id;
+                opt.textContent = `${item.name} (${formatCurrency(item.price)})`;
+                select.appendChild(opt);
+            });
+            updateCotizadorCalculations();
+        }
+
+        function selectCotizadorTerm(months) {
+            currentCotizadorTerm = months;
+            document.querySelectorAll('.term-pill-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.textContent.indexOf(months) !== -1);
+            });
+            updateCotizadorCalculations();
+        }
+
+        function updateCotizadorCalculations() {
+            const select = document.getElementById('cotizador-machine-select');
+            if (!select) return;
+            const machineId = parseInt(select.value, 10);
+            const machine = inventory.find(function(m) { return m.id === machineId; }) || inventory[0];
+            if (!machine) return;
+
+            const slider = document.getElementById('cotizador-down-slider');
+            const downPercent = slider ? parseInt(slider.value, 10) / 100 : 0.20;
+            const hasResidual = document.getElementById('cotizador-residual-check')?.checked ?? true;
+            const residualPercent = hasResidual ? 0.01 : 0.0;
+
+            const downAmount = Math.round(machine.price * downPercent);
+            const financedAmount = machine.price - downAmount;
+
+            const rateEA = 0.089;
+            const monthlyRate = Math.pow(1 + rateEA, 1 / 12) - 1;
+            const n = currentCotizadorTerm;
+            const residualValue = Math.round(machine.price * residualPercent);
+            const pvResidual = residualValue / Math.pow(1 + monthlyRate, n);
+            const principal = financedAmount - pvResidual;
+            const monthlyPayment = Math.round(principal * (monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1));
+
+            // Actualizar UI Izquierda
+            document.getElementById('cotizador-unit-price').textContent = formatCurrency(machine.price);
+            document.getElementById('cotizador-stock-status').textContent = `En Patio (${machine.stock} unidades disponibles)`;
+            document.getElementById('cotizador-down-label').textContent = `${Math.round(downPercent * 100)}% (${formatCurrency(downAmount)})`;
+            document.getElementById('cotizador-monthly-val').innerHTML = `${formatCurrency(monthlyPayment)} <span style="font-size: 1.1rem; color: var(--white); font-weight: 600;">USD/mes</span>`;
+            document.getElementById('cotizador-financed-val').textContent = formatCurrency(financedAmount);
+            document.getElementById('cotizador-term-val').textContent = `${currentCotizadorTerm} Meses`;
+
+            // Actualizar Proforma Derecha
+            document.getElementById('proforma-machine-name').textContent = machine.name;
+            document.getElementById('proforma-machine-desc').textContent = machine.description || '';
+            document.getElementById('proforma-machine-price').textContent = formatCurrency(machine.price);
+            document.getElementById('proforma-down-amount').textContent = `${formatCurrency(downAmount)} (${Math.round(downPercent * 100)}%)`;
+            document.getElementById('proforma-financed-amount').textContent = formatCurrency(financedAmount);
+            document.getElementById('proforma-term-text').textContent = `${currentCotizadorTerm} Meses Cuota Fija`;
+            document.getElementById('proforma-monthly-amount').textContent = `${formatCurrency(monthlyPayment)} USD`;
+            
+            if (currentUser) {
+                document.getElementById('proforma-client-name').textContent = currentUser.name;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateCotizadorDropdown();
+        });
+    </script>
+</body>
+</html>
