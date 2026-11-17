@@ -1786,14 +1786,15 @@ let cloudDb = null;
 let isCloudDbConnected = false;
 let isSeedingCloud = false;
 
-// Configuración predeterminada o personalizable desde UI / LocalStorage
+// Configuración predeterminada de Firebase Firestore para Maqui Ventas
 let firebaseConfig = {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
+    apiKey: "AIzaSyD_8Kq22ODZIFrLzd61vwJROkJwcI5J4nw",
+    authDomain: "maquiventas-db.firebaseapp.com",
+    projectId: "maquiventas-db",
+    storageBucket: "maquiventas-db.firebasestorage.app",
+    messagingSenderId: "427480994517",
+    appId: "1:427480994517:web:9b75a066c8e4c3d8bf085c",
+    measurementId: "G-E109GS4047"
 };
 
 function getStoredFirebaseConfig() {
@@ -1867,17 +1868,30 @@ function subscribeToCloudInventory() {
             });
 
             if (cloudItems.length > 0) {
-                cloudItems.sort((a, b) => (a.id || 0) - (b.id || 0));
-                inventory.splice(0, inventory.length, ...cloudItems);
+                cloudItems.sort((a, b) => {
+                    const isANew = (a.id || 0) > 6;
+                    const isBNew = (b.id || 0) > 6;
+                    if (isANew && isBNew) return (b.id || 0) - (a.id || 0);
+                    if (isANew) return -1;
+                    if (isBNew) return 1;
+                    return (a.id || 0) - (b.id || 0);
+                });
 
-                // Resolver imágenes y assets locales si aplica
-                if (typeof window !== 'undefined' && window._ASSETS_DICT) {
-                    inventory.forEach(item => {
+                // Mapear imágenes con presets si aplica
+                cloudItems.forEach(item => {
+                    if (typeof window !== 'undefined' && window._ASSETS_DICT) {
                         if (item.image && window._ASSETS_DICT[item.image]) {
                             item.image = window._ASSETS_DICT[item.image];
                         }
-                    });
-                }
+                    }
+                    if (!item.image || item.image === 'loader' || item.image === 'preset' || item.image === 'tractor' || item.image === 'forklift' || item.image === 'excavator' || item.image === 'roller') {
+                        if (typeof generateMachinerySvg === 'function') {
+                            item.image = generateMachinerySvg(item.imageType || item.image || 'loader');
+                        }
+                    }
+                });
+
+                inventory.splice(0, inventory.length, ...cloudItems);
 
                 renderCatalog();
                 renderInventory();
@@ -1932,12 +1946,30 @@ function seedCloudInventory() {
         const batch = cloudDb.batch();
         inventory.forEach(item => {
             const docRef = cloudDb.collection('inventory').doc(String(item.id));
-            batch.set(docRef, item);
+            const safeItem = {
+                id: Number(item.id),
+                name: String(item.name || ''),
+                price: Number(item.price || 0),
+                stock: Number(item.stock || 0),
+                category: String(item.category || 'Movimiento de Tierras'),
+                specs: String(item.specs || ''),
+                details: item.details || {},
+                imageType: item.imageType || 'loader',
+                image: (typeof item.image === 'string' && item.image.length > 500 && !item.image.startsWith('data:image/svg')) ? (item.imageType || 'loader') : (item.image || ''),
+                gallery: Array.isArray(item.gallery) ? item.gallery.map(g => (typeof g === 'string' && g.length > 500) ? 'preset' : g) : [],
+                placeholderIcon: ''
+            };
+            batch.set(docRef, safeItem);
         });
         // Sembrar usuarios iniciales
         users.forEach(u => {
             const userRef = cloudDb.collection('users').doc(u.email.toLowerCase());
-            batch.set(userRef, u);
+            batch.set(userRef, {
+                name: u.name,
+                email: u.email,
+                pass: u.pass,
+                role: u.role || 'client'
+            });
         });
         // Sembrar órdenes iniciales
         orderHistory.forEach(o => {
