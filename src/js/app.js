@@ -535,6 +535,7 @@ function register() {
         role: 'client'
     };
     users.push(newUser);
+    if (typeof cloudDbSaveUser === 'function') cloudDbSaveUser(newUser);
 
     showToast('Tu cuenta ha sido creada exitosamente. Iniciando tu sesión...', 'success', '¡Registro Exitoso!');
 
@@ -931,6 +932,13 @@ function processPayment() {
             status: 'Aprobado y Despachado'
         };
         orderHistory.unshift(newOrder);
+        if (typeof cloudDbSaveOrder === 'function') cloudDbSaveOrder(newOrder);
+        if (typeof cloudDbUpdateStock === 'function') {
+            newOrder.items.forEach(ci => {
+                const cur = inventory.find(i => i.id === ci.id);
+                if (cur) cloudDbUpdateStock(cur.id, cur.stock);
+            });
+        }
 
         // Llenar modal de factura formal
         document.getElementById('inv-number').textContent = randomFacturaNum;
@@ -1363,7 +1371,7 @@ function buy(id) {
     });
 
     // Guardar en el historial de compras
-    orderHistory.unshift({
+    const directOrder = {
         orderId: randomOrderId,
         invoiceNumber: randomFacturaNum,
         date: formattedDate,
@@ -1376,7 +1384,10 @@ function buy(id) {
         discount: 0,
         total: item.price,
         status: 'Aprobado y Despachado'
-    });
+    };
+    orderHistory.unshift(directOrder);
+    if (typeof cloudDbSaveOrder === 'function') cloudDbSaveOrder(directOrder);
+    if (typeof cloudDbUpdateStock === 'function') cloudDbUpdateStock(item.id, item.stock);
 
     document.getElementById('inv-number').textContent = randomFacturaNum;
     document.getElementById('inv-customer-name').textContent = currentUser ? currentUser.name : 'Cliente General';
@@ -1486,6 +1497,7 @@ function adjustStock(id, delta) {
     }
 
     item.stock = newStock;
+    if (typeof cloudDbUpdateStock === 'function') cloudDbUpdateStock(item.id, item.stock);
     renderInventory();
     showToast(`Stock de "${item.name}" actualizado a ${item.stock} unidades.`, 'info');
 }
@@ -1677,6 +1689,7 @@ function addMachine() {
     };
 
     inventory.unshift(newMachine);
+    if (typeof cloudDbSaveMachine === 'function') cloudDbSaveMachine(newMachine);
 
     // Limpiar campos y preview
     if (nameInput) nameInput.value = '';
@@ -1705,6 +1718,7 @@ function remove(id) {
             const index = inventory.findIndex(i => i.id === id);
             if (index > -1) {
                 inventory.splice(index, 1);
+                if (typeof cloudDbDeleteMachine === 'function') cloudDbDeleteMachine(id);
                 renderInventory();
                 showToast(`"${itemName}" fue eliminada del catálogo.`, 'info', 'Producto Eliminado');
             }
@@ -1763,12 +1777,357 @@ function submitHelpTicket(formEl) {
     }, 1500);
 }
 
+// ========================================================
+// 17. GESTOR DE BASE DE DATOS EN LA NUBE (FIREBASE FIRESTORE)
+// Sincronización multi-dispositivo y multi-usuario en tiempo real
+// ========================================================
+
+let cloudDb = null;
+let isCloudDbConnected = false;
+let isSeedingCloud = false;
+
+// Configuración predeterminada o personalizable desde UI / LocalStorage
+let firebaseConfig = {
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
+};
+
+function getStoredFirebaseConfig() {
+    try {
+        const stored = localStorage.getItem('maqui_firebase_config');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed && (parsed.projectId || parsed.apiKey)) return parsed;
+        }
+    } catch(e) {}
+    if (typeof window !== 'undefined' && window.MAQUI_FIREBASE_CONFIG && window.MAQUI_FIREBASE_CONFIG.projectId) {
+        return window.MAQUI_FIREBASE_CONFIG;
+    }
+    if (firebaseConfig && firebaseConfig.projectId) {
+        return firebaseConfig;
+    }
+    return null;
+}
+
+function initCloudDatabase() {
+    if (typeof firebase === 'undefined') {
+        console.log('[Cloud DB] Firebase SDK no detectado. Operando en modo local.');
+        updateCloudStatusBadge('local');
+        updateCloudStatsDisplay();
+        return;
+    }
+
+    const config = getStoredFirebaseConfig();
+    if (!config || !config.projectId) {
+        console.log('[Cloud DB] Sin credenciales configuradas. Operando en modo local.');
+        updateCloudStatusBadge('unconfigured');
+        updateCloudStatsDisplay();
+        return;
+    }
+
+    try {
+        if (!firebase.apps || firebase.apps.length === 0) {
+            firebase.initializeApp(config);
+        }
+        cloudDb = firebase.firestore();
+        isCloudDbConnected = true;
+        console.log('[Cloud DB] Conectado a Firestore Cloud: ' + config.projectId);
+        updateCloudStatusBadge('connected', config.projectId);
+        updateCloudStatsDisplay();
+
+        // Suscribirse a las colecciones en tiempo real
+        subscribeToCloudInventory();
+        subscribeToCloudUsers();
+        subscribeToCloudOrders();
+
+    } catch (err) {
+        console.warn('[Cloud DB] Error al inicializar Firestore:', err);
+        updateCloudStatusBadge('error', err.message);
+    }
+}
+
+function subscribeToCloudInventory() {
+    if (!cloudDb) return;
+    try {
+        cloudDb.collection('inventory').onSnapshot((snapshot) => {
+            if (snapshot.empty && !isSeedingCloud) {
+                console.log('[Cloud DB] Colección inventory vacía en la nube. Sembrando catálogo inicial...');
+                seedCloudInventory();
+                return;
+            }
+
+            const cloudItems = [];
+            snapshot.forEach(doc => {
+                const item = doc.data();
+                cloudItems.push(item);
+            });
+
+            if (cloudItems.length > 0) {
+                cloudItems.sort((a, b) => (a.id || 0) - (b.id || 0));
+                inventory.splice(0, inventory.length, ...cloudItems);
+
+                // Resolver imágenes y assets locales si aplica
+                if (typeof window !== 'undefined' && window._ASSETS_DICT) {
+                    inventory.forEach(item => {
+                        if (item.image && window._ASSETS_DICT[item.image]) {
+                            item.image = window._ASSETS_DICT[item.image];
+                        }
+                    });
+                }
+
+                renderCatalog();
+                renderInventory();
+                updateAdminStats();
+                updateCloudStatsDisplay();
+            }
+        }, (err) => {
+            console.warn('[Cloud DB] Listener de inventario:', err);
+            updateCloudStatusBadge('error', err.message);
+        });
+    } catch (e) {
+        console.warn('[Cloud DB] Excepción en subscribeToCloudInventory:', e);
+    }
+}
+
+function subscribeToCloudUsers() {
+    if (!cloudDb) return;
+    try {
+        cloudDb.collection('users').onSnapshot((snapshot) => {
+            if (snapshot.empty) return;
+            snapshot.forEach(doc => {
+                const u = doc.data();
+                if (u && u.email && !users.some(existing => existing.email.toLowerCase() === u.email.toLowerCase())) {
+                    users.push(u);
+                }
+            });
+            updateCloudStatsDisplay();
+        }, (err) => console.warn('[Cloud DB] Listener de usuarios:', err));
+    } catch(e) {}
+}
+
+function subscribeToCloudOrders() {
+    if (!cloudDb) return;
+    try {
+        cloudDb.collection('orders').onSnapshot((snapshot) => {
+            if (snapshot.empty) return;
+            snapshot.forEach(doc => {
+                const o = doc.data();
+                if (o && o.orderId && !orderHistory.some(existing => existing.orderId === o.orderId)) {
+                    orderHistory.unshift(o);
+                }
+            });
+            updateCloudStatsDisplay();
+        }, (err) => console.warn('[Cloud DB] Listener de órdenes:', err));
+    } catch(e) {}
+}
+
+function seedCloudInventory() {
+    if (!cloudDb || isSeedingCloud) return;
+    isSeedingCloud = true;
+    try {
+        const batch = cloudDb.batch();
+        inventory.forEach(item => {
+            const docRef = cloudDb.collection('inventory').doc(String(item.id));
+            batch.set(docRef, item);
+        });
+        // Sembrar usuarios iniciales
+        users.forEach(u => {
+            const userRef = cloudDb.collection('users').doc(u.email.toLowerCase());
+            batch.set(userRef, u);
+        });
+        // Sembrar órdenes iniciales
+        orderHistory.forEach(o => {
+            const orderRef = cloudDb.collection('orders').doc(o.orderId);
+            batch.set(orderRef, o);
+        });
+
+        batch.commit().then(() => {
+            isSeedingCloud = false;
+            console.log('[Cloud DB] Catálogo y datos iniciales sembrados en Firestore.');
+            showToast('Datos sincronizados en tiempo real con Firebase Firestore.', 'success', 'Cloud DB Sincronizado');
+            updateCloudStatsDisplay();
+        }).catch(err => {
+            isSeedingCloud = false;
+            console.warn('[Cloud DB] Error al sembrar:', err);
+        });
+    } catch(e) {
+        isSeedingCloud = false;
+    }
+}
+
+function cloudDbSaveMachine(machine) {
+    if (!cloudDb) return;
+    cloudDb.collection('inventory').doc(String(machine.id)).set(machine)
+        .then(() => updateCloudStatsDisplay())
+        .catch(err => console.warn('[Cloud DB] Error guardando máquina:', err));
+}
+
+function cloudDbDeleteMachine(id) {
+    if (!cloudDb) return;
+    cloudDb.collection('inventory').doc(String(id)).delete()
+        .then(() => updateCloudStatsDisplay())
+        .catch(err => console.warn('[Cloud DB] Error eliminando máquina:', err));
+}
+
+function cloudDbUpdateStock(id, newStock) {
+    if (!cloudDb) return;
+    cloudDb.collection('inventory').doc(String(id)).update({ stock: newStock })
+        .catch(err => console.warn('[Cloud DB] Error actualizando stock:', err));
+}
+
+function cloudDbSaveUser(user) {
+    if (!cloudDb) return;
+    cloudDb.collection('users').doc(user.email.toLowerCase()).set(user)
+        .then(() => updateCloudStatsDisplay())
+        .catch(err => console.warn('[Cloud DB] Error guardando usuario:', err));
+}
+
+function cloudDbSaveOrder(order) {
+    if (!cloudDb) return;
+    cloudDb.collection('orders').doc(order.orderId).set(order)
+        .then(() => updateCloudStatsDisplay())
+        .catch(err => console.warn('[Cloud DB] Error guardando orden:', err));
+}
+
+// Control UI del Modal de Cloud Database
+function openCloudDbModal() {
+    updateCloudStatsDisplay();
+    const config = getStoredFirebaseConfig();
+    const txtArea = document.getElementById('firebase-config-input');
+    if (txtArea && config) {
+        txtArea.value = JSON.stringify(config, null, 2);
+    }
+    const modal = document.getElementById('cloud-db-modal');
+    if (modal) modal.classList.add('active');
+}
+
+function closeCloudDbModal() {
+    closeModal('cloud-db-modal');
+}
+
+function updateCloudStatusBadge(state, detail = '') {
+    const dot = document.getElementById('cloud-status-dot');
+    const modalDot = document.getElementById('modal-cloud-dot');
+    const label = document.getElementById('cloud-status-label');
+    const title = document.getElementById('cloud-conn-status-title');
+    const subtitle = document.getElementById('cloud-conn-project-subtitle');
+    const badge = document.getElementById('cloud-conn-badge');
+
+    if (state === 'connected') {
+        if (dot) { dot.className = 'cloud-dot connected'; }
+        if (modalDot) { modalDot.className = 'cloud-dot connected'; }
+        if (label) label.textContent = 'Cloud DB: Conectado';
+        if (title) title.textContent = 'Estado de Conexión: Firestore Cloud Activo';
+        if (subtitle) subtitle.textContent = `Proyecto sincronizado en tiempo real: "${detail}".`;
+        if (badge) {
+            badge.textContent = 'Cloud Activo';
+            badge.style.background = '#00A651';
+            badge.style.color = '#FFFFFF';
+        }
+    } else if (state === 'error') {
+        if (dot) { dot.className = 'cloud-dot error'; }
+        if (modalDot) { modalDot.className = 'cloud-dot error'; }
+        if (label) label.textContent = 'Cloud DB: Error';
+        if (title) title.textContent = 'Estado de Conexión: Error en Firestore';
+        if (subtitle) subtitle.textContent = detail || 'No se pudo conectar a la base de datos cloud.';
+        if (badge) {
+            badge.textContent = 'Error';
+            badge.style.background = '#DA291C';
+            badge.style.color = '#FFFFFF';
+        }
+    } else {
+        if (dot) { dot.className = 'cloud-dot'; }
+        if (modalDot) { modalDot.className = 'cloud-dot'; }
+        if (label) label.textContent = 'Cloud DB';
+        if (title) title.textContent = 'Estado de Conexión: Modo Prototipo (Memoria Local)';
+        if (subtitle) subtitle.textContent = 'Operando con catálogo predeterminado de fábrica (6 máquinas Caterpillar).';
+        if (badge) {
+            badge.textContent = 'Modo Local';
+            badge.style.background = '#111111';
+            badge.style.color = '#FFCD00';
+        }
+    }
+}
+
+function updateCloudStatsDisplay() {
+    const m = document.getElementById('cloud-stat-machines');
+    const u = document.getElementById('cloud-stat-users');
+    const o = document.getElementById('cloud-stat-orders');
+    if (m && typeof inventory !== 'undefined') m.textContent = inventory.length;
+    if (u && typeof users !== 'undefined') u.textContent = users.length;
+    if (o && typeof orderHistory !== 'undefined') o.textContent = orderHistory.length;
+}
+
+function saveAndApplyFirebaseConfig() {
+    const txtArea = document.getElementById('firebase-config-input');
+    if (!txtArea || !txtArea.value.trim()) {
+        showToast('Por favor pega el código o JSON de configuración de Firebase.', 'warning', 'Campo Vacío');
+        return;
+    }
+
+    let raw = txtArea.value.trim();
+    let configObj = null;
+
+    try {
+        configObj = JSON.parse(raw);
+    } catch(e) {
+        try {
+            const jsonLike = raw
+                .replace(/^(const|let|var)\s+\w+\s*=\s*/, '')
+                .replace(/;\s*$/, '')
+                .replace(/(\w+)\s*:/g, '"$1":')
+                .replace(/'/g, '"');
+            configObj = JSON.parse(jsonLike);
+        } catch(err2) {
+            showToast('Formato de credenciales no reconocido. Asegúrate de incluir apiKey y projectId.', 'error', 'Formato Inválido');
+            return;
+        }
+    }
+
+    if (!configObj || !configObj.projectId) {
+        showToast('El objeto de configuración debe incluir al menos "projectId".', 'error', 'Falta Project ID');
+        return;
+    }
+
+    localStorage.setItem('maqui_firebase_config', JSON.stringify(configObj));
+    showToast(`Conectando con Firestore (${configObj.projectId})...`, 'info', 'Iniciando Firebase');
+    
+    initCloudDatabase();
+    setTimeout(() => {
+        if (isCloudDbConnected) {
+            showToast('Conexión con Firebase Firestore establecida en tiempo real.', 'success', 'Cloud DB Conectado');
+            seedCloudInventory();
+        }
+    }, 1200);
+}
+
+function syncCurrentDataToCloud() {
+    if (!isCloudDbConnected) {
+        showToast('Debes conectar Firebase primero antes de sincronizar datos.', 'warning', 'No Conectado');
+        return;
+    }
+    seedCloudInventory();
+}
+
+function clearFirebaseConfig() {
+    localStorage.removeItem('maqui_firebase_config');
+    isCloudDbConnected = false;
+    cloudDb = null;
+    updateCloudStatusBadge('local');
+    showToast('Credenciales removidas. El sistema ahora opera en Modo Local.', 'info', 'Desconectado');
+}
+
 // Inicialización al cargar la ventana
 window.addEventListener('DOMContentLoaded', () => {
     initHeroSlider();
     startFlashCountdown();
     renderCatalog();
     updateCartBadge();
+    initCloudDatabase();
 });
 
 window.addEventListener('keydown', (e) => {
@@ -1778,6 +2137,7 @@ window.addEventListener('keydown', (e) => {
         closeModal('payment-modal');
         closeModal('history-modal');
         closeModal('help-modal');
+        closeModal('cloud-db-modal');
         closeCart();
         closeConfirmModal(false);
     }

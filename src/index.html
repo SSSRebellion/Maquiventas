@@ -12,6 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto+Condensed:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Estilos CSS Modularizados -->
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Firebase SDK (Firestore Cloud Database) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div class="industrial-ribbon"></div>
@@ -94,6 +97,10 @@
                 <a href="cotizador.html" class="cat-sub-link">Cotizador Formal</a>
                 <span class="cat-sub-link" onclick="openOrderHistoryModal()">Historial de pedidos</span>
                 <span class="cat-sub-link" onclick="openHelpCenter()">Centro de ayuda</span>
+                <button type="button" class="cat-cloud-badge-btn" onclick="openCloudDbModal()" title="Gestionar Base de Datos Cloud (Firestore)">
+                    <span class="cloud-dot" id="cloud-status-dot"></span>
+                    <span id="cloud-status-label">Cloud DB</span>
+                </button>
             </div>
         </div>
     </header>
@@ -1137,6 +1144,96 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeHelpCenter()">
                     Cerrar Centro de Ayuda
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL BASE DE DATOS CLOUD (FIREBASE FIRESTORE) ==================== -->
+    <div id="cloud-db-modal" class="modal-overlay" onclick="if(event.target === this) closeCloudDbModal();">
+        <div class="modal-container" style="max-width: 680px;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <span class="cloud-dot connected" id="modal-cloud-dot"></span>
+                    <div>
+                        <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.5px;">Arquitectura de Persistencia</span>
+                        <h2 class="modal-title" style="margin: 0; font-size: 1.25rem;">Base de Datos Cloud: Firebase Firestore</h2>
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeCloudDbModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem;">
+                
+                <!-- Tarjeta de Estado Activo -->
+                <div class="cloud-card" style="border-left: 4px solid #FFCD00;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                        <div>
+                            <div style="font-weight: 800; font-family: var(--font-heading); font-size: 1.05rem; color: #111;" id="cloud-conn-status-title">
+                                Estado de Conexión: Modo Prototipo (Memoria Local)
+                            </div>
+                            <div style="font-size: 0.82rem; color: var(--gray-600); margin-top: 2px;" id="cloud-conn-project-subtitle">
+                                Operando con catálogo predeterminado de fábrica (6 máquinas Caterpillar).
+                            </div>
+                        </div>
+                        <span class="badge" id="cloud-conn-badge" style="background: #111; color: #FFCD00; font-weight: 700;">Modo Local</span>
+                    </div>
+
+                    <!-- Métricas de la Base de Datos -->
+                    <div class="cloud-stat-grid">
+                        <div class="cloud-stat-box">
+                            <div class="cloud-stat-val" id="cloud-stat-machines">6</div>
+                            <div class="cloud-stat-lbl">Maquinarias</div>
+                        </div>
+                        <div class="cloud-stat-box">
+                            <div class="cloud-stat-val" id="cloud-stat-users">2</div>
+                            <div class="cloud-stat-lbl">Usuarios</div>
+                        </div>
+                        <div class="cloud-stat-box">
+                            <div class="cloud-stat-val" id="cloud-stat-orders">1</div>
+                            <div class="cloud-stat-lbl">Órdenes / Facturas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Configuración de Firebase -->
+                <div class="cloud-card">
+                    <div style="font-weight: 800; font-size: 0.95rem; font-family: var(--font-heading); margin-bottom: 0.5rem; text-transform: uppercase;">
+                        Credenciales de Firebase Firestore
+                    </div>
+                    <p style="font-size: 0.82rem; color: var(--gray-600); margin-bottom: 1rem;">
+                        Pega aquí tu objeto <code style="background: #f1f1f1; padding: 2px 6px; border-radius: 4px;">firebaseConfig</code> de la consola de Firebase para activar la sincronización multi-dispositivo en tiempo real.
+                    </p>
+                    <div class="form-group" style="margin-bottom: 0.75rem;">
+                        <textarea id="firebase-config-input" class="form-control" rows="5" placeholder='const firebaseConfig = {&#10;  apiKey: "AIzaSy...",&#10;  authDomain: "tu-proyecto.firebaseapp.com",&#10;  projectId: "tu-proyecto",&#10;  storageBucket: "tu-proyecto.appspot.com",&#10;  messagingSenderId: "123456789",&#10;  appId: "1:1234:web:abcd"&#10;};' style="font-family: monospace; font-size: 0.8rem;"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-primary" onclick="saveAndApplyFirebaseConfig()" style="font-weight: 800; padding: 0.6rem 1.25rem;">
+                            Conectar Base de Datos Cloud
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="syncCurrentDataToCloud()" style="font-weight: 700; padding: 0.6rem 1.25rem;" id="btn-sync-to-cloud">
+                            Subir Datos Actuales a la Nube
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="clearFirebaseConfig()" style="color: var(--danger); border-color: var(--danger);" title="Volver a modo local">
+                            Desconectar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Guía rápida de obtención de credenciales -->
+                <div style="background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.82rem; color: var(--gray-700);">
+                    <div style="font-weight: 700; color: #111; margin-bottom: 4px;">¿Cómo obtener tus credenciales en 2 minutos (Gratis)?</div>
+                    <ol style="margin: 0; padding-left: 1.2rem; line-height: 1.6;">
+                        <li>Entra a <a href="https://console.firebase.google.com" target="_blank" style="color: var(--primary-dark); font-weight: 700;">console.firebase.google.com</a> con tu cuenta de Google.</li>
+                        <li>Haz clic en <strong>"Crear un proyecto"</strong> (ej. <em>maquiventas-db</em>).</li>
+                        <li>En el menú izquierdo, ve a <strong>Compilación &gt; Firestore Database</strong> y haz clic en <strong>Crear base de datos</strong> (selecciona <em>Modo de prueba</em>).</li>
+                        <li>Ve a Configuración del Proyecto (icono de engranaje) &gt; Añadir app web <strong>&lt;/&gt;</strong> y copia el código <code>firebaseConfig</code>.</li>
+                    </ol>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeCloudDbModal()">
+                    Cerrar
                 </button>
             </div>
         </div>

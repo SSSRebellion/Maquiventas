@@ -1,0 +1,96 @@
+/* ========================================================
+   MAQUI VENTAS - CLOUD DATABASE (FIREBASE FIRESTORE) STYLES
+   ======================================================== */
+
+.cat-cloud-badge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #111111;
+    color: #FFCD00;
+    border: 1px solid #333333;
+    padding: 5px 12px;
+    border-radius: var(--radius-xs);
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-cloud-badge-btn:hover {
+    background: #222222;
+    border-color: #FFCD00;
+    color: #FFFFFF;
+}
+
+.cloud-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gray-400);
+    display: inline-block;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.cloud-dot.connected {
+    background: #00A651;
+    box-shadow: 0 0 8px rgba(0, 166, 81, 0.8);
+    animation: pulseCloudDot 2s infinite;
+}
+
+.cloud-dot.warning {
+    background: #FFCD00;
+}
+
+.cloud-dot.error {
+    background: #DA291C;
+}
+
+@keyframes pulseCloudDot {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 166, 81, 0.7); }
+    70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(0, 166, 81, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 166, 81, 0); }
+}
+
+.cloud-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.cloud-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 1rem;
+}
+
+.cloud-stat-box {
+    background: var(--gray-50);
+    border-left: 3px solid #FFCD00;
+    padding: 10px 14px;
+    border-radius: var(--radius-xs);
+}
+
+.cloud-stat-val {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #111111;
+    line-height: 1.1;
+}
+
+.cloud-stat-lbl {
+    font-size: 0.72rem;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    margin-top: 2px;
+}
